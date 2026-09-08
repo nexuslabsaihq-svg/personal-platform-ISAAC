@@ -8,22 +8,26 @@
     color-scheme: dark;
   }
   body {
-    background-color: #09090b;
-    color: #f4f4f5;
+    background-color: #0B0E14;
+    color: #E8EAED;
+    font-family: 'Inter', sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Sora', sans-serif;
   }
 }
 
-/* Custom subtle scrollbar */
+/* Custom sleek scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #09090b;
+  background: #0B0E14;
 }
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: #1F2430;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: #5B8DEF;
 }

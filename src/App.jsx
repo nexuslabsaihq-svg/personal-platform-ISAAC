@@ -8,8 +8,8 @@ import Footer from './components/Footer';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col selection:bg-zinc-800 selection:text-white">
-      {/* Fixed Navbar */}
+    <div className="min-h-screen bg-[#0B0E14] text-[#E8EAED] flex flex-col selection:bg-accent/25 selection:text-white font-sans">
+      {/* Sticky / Fixed Navbar */}
       <Navbar />
 
       {/* Main Content Sections */}
