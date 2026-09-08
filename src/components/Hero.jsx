@@ -1,187 +1,250 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowDown, Sparkles, Terminal, ShieldCheck, UserCheck } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { ArrowDown, Linkedin, Github, Mail, CheckCircle2, Terminal, Award, Users, Trophy } from 'lucide-react';
 
-const SKILLS_CHIPS = [
-  'Gestión Estratégica',
-  'Power BI & Analytics',
-  'Optimización BPMN',
-  'Control Financiero',
-  'Metodologías Ágiles',
-];
+function FloatingStat({ value, suffix = '', prefix = '', decimals = 0, label, sublabel, icon: Icon, className }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    if (!isInView) return;
+    let startTime = null;
+    const duration = 1500;
+
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      setDisplayValue(easeOut * value);
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        setDisplayValue(value);
+      }
+    };
+
+    requestAnimationFrame(step);
+  }, [isInView, value]);
+
+  const formatted = decimals > 0 
+    ? displayValue.toFixed(decimals) 
+    : Math.round(displayValue);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, delay: 0.4 }}
+      className={`p-3 sm:p-3.5 rounded-xl bg-[#131722]/90 border border-[#1F2430] backdrop-blur-md shadow-xl shadow-black/50 hover:border-gold/50 transition-all ${className}`}
+    >
+      <div className="flex items-center gap-2.5">
+        {Icon && (
+          <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center text-gold shrink-0">
+            <Icon size={16} />
+          </div>
+        )}
+        <div>
+          <div className="font-sora font-bold text-base sm:text-lg text-gold leading-none">
+            {prefix}{formatted}{suffix}
+          </div>
+          <div className="text-[11px] font-medium text-[#E8EAED] leading-tight mt-0.5">
+            {label}
+          </div>
+          {sublabel && (
+            <div className="text-[9px] font-mono text-[#8B92A5] leading-none mt-0.5">
+              {sublabel}
+            </div>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Hero() {
   return (
     <section
       id="home"
-      className="min-h-screen pt-28 pb-16 flex flex-col justify-center max-w-5xl mx-auto px-4 sm:px-6"
+      className="min-h-screen pt-28 pb-16 flex flex-col justify-center max-w-6xl mx-auto px-4 sm:px-6"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        {/* Left Column: Staggered text content */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        {/* COLUMNA IZQUIERDA */}
         <div className="lg:col-span-7 space-y-6">
-          {/* Step 1: Subtítulo pequeño / Tag */}
+          {/* Badge pequeño arriba */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
-            className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-[#131722] border border-[#1F2430]/80 text-xs font-mono text-[#8B92A5]"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#131722] border border-[#1F2430] text-xs font-mono text-[#8B92A5]"
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[#E8EAED]">disponible:</span>
-            <span className="text-accent">proyectos & pasantías</span>
+            <span>Estudiante de Administración de Empresas</span>
           </motion.div>
 
-          {/* Step 2: Título grande */}
-          <motion.div
+          {/* Título grande en 3 líneas */}
+          <motion.h1
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.22, ease: 'easeOut' }}
-            className="space-y-1.5"
+            transition={{ duration: 0.5, delay: 0.2, ease: 'easeOut' }}
+            className="text-4xl sm:text-5xl lg:text-[3.5rem] font-sora font-bold tracking-tight text-[#E8EAED] leading-[1.12]"
           >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-sora font-bold tracking-tight text-[#E8EAED] leading-[1.1]">
-              Isaac Patricio <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E8EAED] via-[#8B92A5] to-accent">
-                Pastén Díaz
-              </span>
-            </h1>
-          </motion.div>
+            Construyo procesos <br />
+            administrativos que <br />
+            <span className="text-accent drop-shadow-[0_0_25px_rgba(91,141,239,0.35)]">
+              funcionan.
+            </span>
+          </motion.h1>
 
-          {/* Step 3: Bajada / Subtítulo */}
+          {/* Párrafo de 2 líneas */}
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.35, ease: 'easeOut' }}
+            transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut' }}
             className="text-base sm:text-lg text-[#8B92A5] leading-relaxed max-w-xl"
           >
-            Estudiante de <span className="text-[#E8EAED] font-medium">Ingeniería en Administración de Empresas</span>.
-            Especializado en optimización de procesos de negocio, control de gestión estratégica y
-            análisis de datos cuantitativos para la toma de decisiones.
+            En última etapa de Ingeniería en Administración de Empresas en INACAP, con sólida experiencia liderando equipos de más de 7 personas y optimizando la gestión operativa.
           </motion.p>
 
-          {/* Step 4: Chips de habilidades */}
+          {/* Dos botones */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.48, ease: 'easeOut' }}
-            className="flex flex-wrap gap-2 pt-1"
-          >
-            {SKILLS_CHIPS.map((chip) => (
-              <span
-                key={chip}
-                className="px-2.5 py-1 rounded-md bg-[#131722] border border-[#1F2430]/70 text-xs font-mono text-[#8B92A5] hover:border-accent/40 hover:text-[#E8EAED] transition-colors"
-              >
-                #{chip}
-              </span>
-            ))}
-          </motion.div>
-
-          {/* Step 5: Botón de acción */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.62, ease: 'easeOut' }}
-            className="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
+            transition={{ duration: 0.5, delay: 0.4, ease: 'easeOut' }}
+            className="pt-2 flex flex-wrap items-center gap-4"
           >
             <a
               href="#portfolio"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-accent text-[#0B0E14] font-sora font-semibold text-sm hover:bg-accent-hover hover:shadow-[0_0_25px_rgba(91,141,239,0.35)] transition-all"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-accent text-[#0B0E14] font-sora font-semibold text-sm hover:bg-accent-hover hover:shadow-[0_0_25px_rgba(91,141,239,0.4)] transition-all"
             >
-              <span>Explorar portafolio</span>
+              <span>Ver Portfolio</span>
               <ArrowDown size={16} />
             </a>
             <a
               href="#contact"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#131722] text-[#E8EAED] font-medium text-sm border border-[#1F2430] hover:border-[#8B92A5]/50 hover:bg-[#181D2A] transition-all"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#131722] text-[#E8EAED] font-sora font-medium text-sm border border-[#1F2430] hover:border-accent/60 hover:text-white transition-all"
             >
-              <span>Contáctame</span>
+              <span>Contactarme</span>
+            </a>
+          </motion.div>
+
+          {/* Fila de íconos sociales */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5, ease: 'easeOut' }}
+            className="pt-4 flex items-center gap-4 border-t border-[#1F2430]/60 text-[#8B92A5]"
+          >
+            <span className="font-mono text-xs text-[#8B92A5]">Social:</span>
+            <a
+              href="https://linkedin.com/in/isaac-patricio-diaz-14041b3b3"
+              target="_blank"
+              rel="noreferrer"
+              className="p-2.5 rounded-xl bg-[#131722] border border-[#1F2430] hover:border-accent hover:text-accent transition-colors"
+              aria-label="LinkedIn"
+            >
+              <Linkedin size={18} />
+            </a>
+            <a
+              href="https://github.com/nexuslabsaihq-svg/personal-platform-ISAAC"
+              target="_blank"
+              rel="noreferrer"
+              className="p-2.5 rounded-xl bg-[#131722] border border-[#1F2430] hover:border-accent hover:text-accent transition-colors"
+              aria-label="GitHub"
+            >
+              <Github size={18} />
+            </a>
+            <a
+              href="mailto:isaacipp1709@gmail.com"
+              className="p-2.5 rounded-xl bg-[#131722] border border-[#1F2430] hover:border-accent hover:text-accent transition-colors"
+              aria-label="Email"
+            >
+              <Mail size={18} />
             </a>
           </motion.div>
         </div>
 
-        {/* Right Column: Marco tipo carnet colgante con animación de balanceo */}
-        <div className="lg:col-span-5 flex flex-col items-center justify-center pt-6 lg:pt-0">
-          {/* Cordón / Soporte superior del carnet */}
-          <div className="relative flex flex-col items-center">
-            {/* Cinta del cordón */}
-            <div className="w-4 h-12 bg-gradient-to-b from-[#1F2430]/10 via-[#1F2430]/70 to-[#131722] border-x border-[#1F2430]/60" />
-            {/* Clip metálico */}
-            <div className="w-10 h-3 rounded-sm bg-[#1F2430] border border-[#8B92A5]/30 shadow-sm mb-1 z-10" />
-            <div className="w-5 h-2 rounded-full bg-[#0B0E14] border border-[#1F2430] -mt-1 z-10" />
+        {/* COLUMNA DERECHA */}
+        <div className="lg:col-span-5 flex flex-col items-center justify-center">
+          <div className="relative w-full max-w-[340px] sm:max-w-[380px] flex flex-col items-center">
+            {/* Glow / Aura en acento primario detrás de la foto */}
+            <div className="absolute top-12 w-64 h-64 sm:w-72 sm:h-72 rounded-full bg-accent/20 blur-3xl -z-10 pointer-events-none" />
 
-            {/* Carnet colgante oscilante */}
-            <motion.div
-              animate={{ rotate: [-2, 2, -2] }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              style={{ transformOrigin: 'top center' }}
-              className="w-72 sm:w-80 rounded-2xl bg-[#131722] border border-[#1F2430]/80 p-5 shadow-2xl shadow-black/80 relative overflow-hidden backdrop-blur-sm hover:border-accent/50 transition-colors"
-            >
-              {/* Ranura del broche */}
-              <div className="w-12 h-2.5 mx-auto rounded-full bg-[#0B0E14] border border-[#1F2430] mb-4" />
+            {/* Foto real dentro de contenedor ovalado / circular */}
+            <div className="relative w-60 h-60 sm:w-72 sm:h-72 rounded-full p-2 bg-gradient-to-b from-[#1F2430] via-[#131722] to-[#1F2430]/40 border border-[#1F2430] shadow-2xl overflow-hidden">
+              <img
+                src="/images/profile.jpg"
+                alt="Isaac Patricio Pastén Díaz"
+                className="w-full h-full object-cover rounded-full"
+                onError={(e) => {
+                  // Fallback directo si la ruta tuviera alguna variación
+                  if (e.target.src.indexOf('profile.jpg.JPG') === -1) {
+                    e.target.src = '/profile.jpg.JPG';
+                  }
+                }}
+              />
+            </div>
 
-              {/* Carnet Header */}
-              <div className="flex items-center justify-between border-b border-[#1F2430]/60 pb-3 mb-4">
-                <div className="flex items-center gap-1.5 font-mono text-[10px] text-accent tracking-wider">
-                  <ShieldCheck size={13} />
-                  <span>CREDENTIAL // 2026</span>
+            {/* 3 Cards Flotantes Superpuestas a la foto */}
+            {/* Card 1: 7+ Personas lideradas (Arriba Izquierda) */}
+            <FloatingStat
+              value={7}
+              suffix="+"
+              label="Personas lideradas"
+              icon={Users}
+              className="absolute -top-3 -left-2 sm:-left-6 z-20"
+            />
+
+            {/* Card 2: 8 Certificaciones INACAP (Medio Derecha) */}
+            <FloatingStat
+              value={8}
+              label="Certificaciones"
+              sublabel="INACAP"
+              icon={Award}
+              className="absolute top-28 -right-2 sm:-right-6 z-20"
+            />
+
+            {/* Card 3: 5.9 Nota de egreso (Abajo Izquierda) */}
+            <FloatingStat
+              value={5.9}
+              decimals={1}
+              label="Nota de egreso"
+              sublabel="Ranking N°2"
+              icon={Trophy}
+              className="absolute bottom-16 -left-2 sm:-left-6 z-20"
+            />
+
+            {/* Card pequeña debajo de la foto estilo code snippet: "Herramientas" */}
+            <div className="w-full mt-6 p-3.5 rounded-xl bg-[#131722]/95 border border-[#1F2430] shadow-xl z-20">
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#1F2430]/60">
+                <div className="flex items-center gap-1.5 font-mono text-[11px] text-[#8B92A5]">
+                  <Terminal size={13} className="text-accent" />
+                  <span className="text-[#E8EAED] font-medium">Herramientas</span>
                 </div>
-                <span className="font-mono text-[10px] text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">
-                  ACTIVO
-                </span>
-              </div>
-
-              {/* Carnet Body / Foto & Datos */}
-              <div className="space-y-4">
-                {/* Marco de fotografía / Monograma */}
-                <div className="relative mx-auto w-32 h-36 rounded-xl bg-[#0B0E14] border border-[#1F2430] overflow-hidden flex flex-col items-center justify-center group shadow-inner">
-                  {/* Subtle ambient light */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-accent/15 via-transparent to-transparent" />
-                  <div className="w-16 h-16 rounded-2xl bg-[#131722] border border-[#1F2430] flex items-center justify-center font-sora font-bold text-2xl text-accent shadow-md">
-                    IP
-                  </div>
-                  <span className="mt-2 font-mono text-[9px] text-[#8B92A5] tracking-widest uppercase">
-                    ID: 2026-ADM
-                  </span>
-                </div>
-
-                {/* Detalles de identidad */}
-                <div className="text-center space-y-1">
-                  <h3 className="font-sora font-semibold text-base text-[#E8EAED]">
-                    Isaac Patricio Pastén Díaz
-                  </h3>
-                  <p className="font-mono text-xs text-accent">
-                    Ing. Administración de Empresas
-                  </p>
-                  <p className="text-[11px] text-[#8B92A5]">
-                    Gestión Estratégica & Business Analytics
-                  </p>
-                </div>
-
-                {/* Código de barras / Footer del carnet */}
-                <div className="pt-3 border-t border-[#1F2430]/60 flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <div className="h-4 flex items-center gap-[2px]">
-                      {[4, 8, 2, 6, 3, 7, 5, 9, 3, 6, 2, 7, 4, 8, 3, 5, 2, 6, 4].map((h, i) => (
-                        <div
-                          key={i}
-                          className="w-[2px] bg-[#8B92A5]/50"
-                          style={{ height: `${h * 1.6}px` }}
-                        />
-                      ))}
-                    </div>
-                    <p className="font-mono text-[8px] text-[#8B92A5]/70">
-                      SEC-KEY: 7894-ISAAC-DEV
-                    </p>
-                  </div>
-                  <div className="w-7 h-7 rounded-lg bg-gold/10 border border-gold/40 flex items-center justify-center text-gold text-xs font-bold font-mono">
-                    ★
-                  </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 rounded-full bg-red-500/60" />
+                  <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
+                  <div className="w-2 h-2 rounded-full bg-green-500/60" />
                 </div>
               </div>
-            </motion.div>
+
+              <div className="space-y-1.5 font-mono text-xs">
+                <div className="flex items-center gap-2 text-[#E8EAED]">
+                  <CheckCircle2 size={13} className="text-accent shrink-0" />
+                  <span>Excel Intermedio</span>
+                </div>
+                <div className="flex items-center gap-2 text-[#E8EAED]">
+                  <CheckCircle2 size={13} className="text-accent shrink-0" />
+                  <span>Power BI Básico</span>
+                </div>
+                <div className="flex items-center gap-2 text-[#E8EAED]">
+                  <CheckCircle2 size={13} className="text-accent shrink-0" />
+                  <span>HCMFRONT</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

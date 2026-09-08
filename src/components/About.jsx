@@ -1,160 +1,137 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { GraduationCap, Target, Compass, Users, Award, Trophy, Star } from 'lucide-react';
-import AnimatedStat from './AnimatedStat';
+import { User, MapPin, Mail, Briefcase, ArrowRight } from 'lucide-react';
 
-const STATS = [
-  { value: 7, suffix: '+', label: 'Colaboradores liderados', icon: Users },
-  { value: 5.9, decimals: 1, label: 'Nota de egreso', icon: Star },
-  { value: 2, prefix: 'N°', label: 'Ranking de egreso', icon: Trophy },
-  { value: 8, label: 'Certificaciones profesionales', icon: Award },
+const SKILLS_DATA = [
+  { name: 'Excel (reportes y control)', level: 65 },
+  { name: 'Power BI', level: 40 },
+  { name: 'HCMFRONT (gestión de personas)', level: 70 },
+  { name: 'Gestión de Equipos y Personas', level: 80 },
+  { name: 'Atención al Cliente y Resolución de Incidencias', level: 90 },
+  { name: 'IA Aplicada (Prompt Engineering, Claude, Gemini)', level: 75 },
 ];
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' },
-  },
-};
 
 export default function About() {
   return (
-    <motion.section
-      id="about"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className="py-24 max-w-5xl mx-auto px-4 sm:px-6 border-t border-[#1F2430]/40"
-    >
-      <div className="space-y-12">
-        {/* Section Header */}
-        <div className="space-y-2">
-          <p className="font-mono text-xs font-semibold tracking-wider text-accent uppercase">
-            // 01. Sobre mí
-          </p>
-          <h2 className="text-2xl sm:text-3xl font-sora font-bold tracking-tight text-[#E8EAED]">
-            Perfil Profesional & Métricas
-          </h2>
-        </div>
-
-        {/* PASO 9: Contadores Animados (Logros en Dorado #D4AF37) */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {STATS.map((stat, i) => (
-            <AnimatedStat
-              key={i}
-              value={stat.value}
-              suffix={stat.suffix}
-              prefix={stat.prefix}
-              decimals={stat.decimals}
-              label={stat.label}
-              icon={stat.icon}
-            />
-          ))}
-        </div>
-
-        {/* Bio Placeholder Paragraph */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-[#131722] border border-[#1F2430]/60 space-y-4">
-          <div className="flex items-center gap-2 font-mono text-xs text-accent">
-            <span>bio.txt</span>
-            <span className="text-[#8B92A5]">•</span>
-            <span className="text-[#8B92A5]">lectura ~1 min</span>
-          </div>
-          <p className="text-base sm:text-lg text-[#E8EAED] leading-relaxed">
-            [Tu bio aquí: Soy estudiante de Ingeniería en Administración de Empresas orientado a la
-            optimización integral de procesos, diseño de estrategias empresariales y el análisis
-            financiero mediante herramientas digitales. Mi foco está en transformar datos en
-            decisiones ágiles, medibles y de alto impacto organizacional.]
-          </p>
-          <p className="text-sm text-[#8B92A5] italic">
-            [Párrafo complementario: Experiencia liderando equipos académicos y proyectos de control de gestión con metodologías ágiles y orientación a la excelencia.]
-          </p>
-        </div>
-
-        {/* Highlight Cards en Cascada (Stagger) */}
+    <section id="about" className="py-24 max-w-6xl mx-auto px-4 sm:px-6 border-t border-[#1F2430]/40">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+        {/* COLUMNA IZQUIERDA: About Me */}
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-5"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="lg:col-span-6 space-y-6"
         >
-          {/* Card 1 */}
-          <motion.div
-            variants={itemVariants}
-            whileHover={{
-              y: -4,
-              boxShadow: '0 10px 30px -10px rgba(91, 141, 239, 0.2)',
-            }}
-            transition={{ duration: 0.2 }}
-            className="p-6 rounded-2xl bg-[#131722] border border-[#1F2430]/60 hover:border-accent/60 transition-colors space-y-3"
-          >
-            <div className="w-10 h-10 rounded-xl bg-[#1F2430]/50 flex items-center justify-center text-accent">
-              <GraduationCap size={20} />
-            </div>
-            <h3 className="text-base font-sora font-semibold text-[#E8EAED]">
-              Formación Académica
-            </h3>
-            <p className="text-xs text-[#8B92A5] leading-relaxed">
-              [Ingeniería en Administración de Empresas — formación centrada en gestión estratégica, finanzas y operaciones empresariales]
+          <div className="space-y-2">
+            <p className="font-mono text-xs font-semibold tracking-wider text-accent uppercase">
+              // 01. About Me
             </p>
-          </motion.div>
+            <h2 className="text-3xl sm:text-4xl font-sora font-bold tracking-tight text-[#E8EAED]">
+              Especialista en procesos, gestión y personas.
+            </h2>
+          </div>
 
-          {/* Card 2 */}
-          <motion.div
-            variants={itemVariants}
-            whileHover={{
-              y: -4,
-              boxShadow: '0 10px 30px -10px rgba(91, 141, 239, 0.2)',
-            }}
-            transition={{ duration: 0.2 }}
-            className="p-6 rounded-2xl bg-[#131722] border border-[#1F2430]/60 hover:border-accent/60 transition-colors space-y-3"
-          >
-            <div className="w-10 h-10 rounded-xl bg-[#1F2430]/50 flex items-center justify-center text-accent">
-              <Target size={20} />
-            </div>
-            <h3 className="text-base font-sora font-semibold text-[#E8EAED]">
-              Áreas de Interés
-            </h3>
-            <p className="text-xs text-[#8B92A5] leading-relaxed">
-              [Control de gestión, inteligencia de negocios (BI), optimización BPMN y evaluación económica de proyectos]
-            </p>
-          </motion.div>
+          <p className="text-base text-[#8B92A5] leading-relaxed">
+            Estudiante en última etapa de <span className="text-[#E8EAED] font-medium">Ingeniería en Administración de Empresas en INACAP</span>. Mi enfoque profesional combina el rigor analítico, la optimización de procesos operativos y la toma de decisiones basada en datos. Cuento con experiencia comprobable en liderazgo de equipos multidisciplinarios de más de 7 personas, implementación de procedimientos de control interno y resolución ágil de incidencias en entornos corporativos dinámicos.
+          </p>
 
-          {/* Card 3 */}
-          <motion.div
-            variants={itemVariants}
-            whileHover={{
-              y: -4,
-              boxShadow: '0 10px 30px -10px rgba(91, 141, 239, 0.2)',
-            }}
-            transition={{ duration: 0.2 }}
-            className="p-6 rounded-2xl bg-[#131722] border border-[#1F2430]/60 hover:border-accent/60 transition-colors space-y-3"
-          >
-            <div className="w-10 h-10 rounded-xl bg-[#1F2430]/50 flex items-center justify-center text-accent">
-              <Compass size={20} />
+          {/* Mini-datos */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <div className="p-3.5 rounded-xl bg-[#131722] border border-[#1F2430] flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-[#1F2430]/50 flex items-center justify-center text-accent shrink-0">
+                <User size={15} />
+              </div>
+              <div className="truncate">
+                <div className="text-[10px] font-mono text-[#8B92A5]">Nombre</div>
+                <div className="text-xs font-medium text-[#E8EAED] truncate">Isaac Patricio Pastén Díaz</div>
+              </div>
             </div>
-            <h3 className="text-base font-sora font-semibold text-[#E8EAED]">
-              Objetivo Profesional
-            </h3>
-            <p className="text-xs text-[#8B92A5] leading-relaxed">
-              [Aportar valor estratégico y operativo en organizaciones dinámicas mediante el rigor analítico y la eficiencia de procesos]
+
+            <div className="p-3.5 rounded-xl bg-[#131722] border border-[#1F2430] flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-[#1F2430]/50 flex items-center justify-center text-accent shrink-0">
+                <MapPin size={15} />
+              </div>
+              <div className="truncate">
+                <div className="text-[10px] font-mono text-[#8B92A5]">Ubicación</div>
+                <div className="text-xs font-medium text-[#E8EAED] truncate">Macul / Santiago, Chile</div>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-[#131722] border border-[#1F2430] flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-[#1F2430]/50 flex items-center justify-center text-accent shrink-0">
+                <Mail size={15} />
+              </div>
+              <div className="truncate">
+                <div className="text-[10px] font-mono text-[#8B92A5]">Email</div>
+                <div className="text-xs font-medium text-[#E8EAED] truncate">isaacipp1709@gmail.com</div>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-[#131722] border border-[#1F2430] flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-[#1F2430]/50 flex items-center justify-center text-emerald-400 shrink-0">
+                <Briefcase size={15} />
+              </div>
+              <div className="truncate">
+                <div className="text-[10px] font-mono text-[#8B92A5]">Disponibilidad</div>
+                <div className="text-xs font-medium text-emerald-400 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Abierto a trabajar
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-2">
+            <a
+              href="#process"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#131722] border border-[#1F2430] hover:border-accent text-xs font-sora font-medium text-[#E8EAED] hover:text-accent transition-all group"
+            >
+              <span>Conoce mi metodología de trabajo</span>
+              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </a>
+          </div>
+        </motion.div>
+
+        {/* COLUMNA DERECHA: My Expertise (Barras animadas) */}
+        <motion.div
+          id="skills"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, delay: 0.15, ease: 'easeOut' }}
+          className="lg:col-span-6 space-y-6"
+        >
+          <div className="space-y-2">
+            <p className="font-mono text-xs font-semibold tracking-wider text-accent uppercase">
+              // 02. My Expertise
             </p>
-          </motion.div>
+            <h2 className="text-3xl sm:text-4xl font-sora font-bold tracking-tight text-[#E8EAED]">
+              Competencias & Herramientas
+            </h2>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-[#131722] border border-[#1F2430] space-y-5 shadow-xl shadow-black/20">
+            {SKILLS_DATA.map((skill, index) => (
+              <div key={index} className="space-y-1.5">
+                <div className="flex items-center justify-between text-xs font-medium">
+                  <span className="text-[#E8EAED]">{skill.name}</span>
+                  <span className="font-mono text-accent">{skill.level}%</span>
+                </div>
+                <div className="h-2 w-full rounded-full bg-[#0B0E14] overflow-hidden border border-[#1F2430]/60">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${skill.level}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.2, delay: 0.1 * index, ease: 'easeOut' }}
+                    className="h-full rounded-full bg-gradient-to-r from-accent to-[#7AA6F8] shadow-[0_0_10px_rgba(91,141,239,0.5)]"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </motion.div>
       </div>
-    </motion.section>
+    </section>
   );
 }
