@@ -23,7 +23,7 @@ const SKILLS = [
 const COLOR_MAP = {
   accent: { bar: 'bg-accent', glow: 'shadow-accent' },
   gold: { bar: 'bg-gold', glow: 'shadow-gold' },
-  purple: { bar: 'bg-purple-brand', glow: '' },
+  purple: { bar: 'bg-violet-custom', glow: '' },
 };
 
 function SkillBar({ name, level, color, delay = 0 }) {
