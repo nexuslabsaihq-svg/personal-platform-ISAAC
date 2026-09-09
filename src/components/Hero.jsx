@@ -1,44 +1,54 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import React, { useEffect, useState, useRef, lazy, Suspense } from 'react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { ArrowDown, Linkedin, Github, Mail, CheckCircle2, Terminal, Award, Users, Trophy } from 'lucide-react';
+import { useReducedMotion } from '../hooks/useReducedMotion';
+import { usePointerDevice } from '../hooks/usePointerDevice';
+import MagneticButton from './ui/MagneticButton';
+import RevealOnScroll from './ui/RevealOnScroll';
+
+// Lazy load the heavy 3D scene
+const HeroScene = lazy(() => import('./hero/HeroScene'));
 
 function FloatingStat({ value, suffix = '', prefix = '', decimals = 0, label, sublabel, icon: Icon, className }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const [inView, setInView] = useState(false);
   const [displayValue, setDisplayValue] = useState(0);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (!isInView) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) setInView(true);
+    }, { threshold: 0.1 });
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!inView) return;
+    if (reducedMotion) { setDisplayValue(value); return; }
+
     let startTime = null;
     const duration = 1500;
-
     const step = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
       const easeOut = 1 - Math.pow(1 - progress, 3);
       setDisplayValue(easeOut * value);
-
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      } else {
-        setDisplayValue(value);
-      }
+      if (progress < 1) requestAnimationFrame(step);
+      else setDisplayValue(value);
     };
-
     requestAnimationFrame(step);
-  }, [isInView, value]);
+  }, [inView, value, reducedMotion]);
 
-  const formatted = decimals > 0 
-    ? displayValue.toFixed(decimals) 
-    : Math.round(displayValue);
+  const formatted = decimals > 0 ? displayValue.toFixed(decimals) : Math.round(displayValue);
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, scale: 0.8 }}
+      initial={{ opacity: 0, scale: 0.85 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, delay: 0.4 }}
-      className={`p-3 sm:p-3.5 rounded-xl bg-[#131722]/90 border border-[#1F2430] backdrop-blur-md shadow-xl shadow-black/50 hover:border-gold/50 transition-all ${className}`}
+      className={`p-3 sm:p-3.5 rounded-xl bg-surface/90 border border-border-dark backdrop-blur-md shadow-card hover:border-gold/50 hover:shadow-gold transition-all duration-300 ${className}`}
     >
       <div className="flex items-center gap-2.5">
         {Icon && (
@@ -50,11 +60,11 @@ function FloatingStat({ value, suffix = '', prefix = '', decimals = 0, label, su
           <div className="font-sora font-bold text-base sm:text-lg text-gold leading-none">
             {prefix}{formatted}{suffix}
           </div>
-          <div className="text-[11px] font-medium text-[#E8EAED] leading-tight mt-0.5">
+          <div className="text-[11px] font-medium text-text-main leading-tight mt-0.5">
             {label}
           </div>
           {sublabel && (
-            <div className="text-[9px] font-mono text-[#8B92A5] leading-none mt-0.5">
+            <div className="text-[9px] font-mono text-text-muted leading-none mt-0.5">
               {sublabel}
             </div>
           )}
@@ -64,190 +74,286 @@ function FloatingStat({ value, suffix = '', prefix = '', decimals = 0, label, su
   );
 }
 
+const TERMINAL_LINES = [
+  { text: '✓ Excel Intermedio', delay: 0.6 },
+  { text: '✓ Power BI Básico', delay: 0.9 },
+  { text: '✓ HCMFRONT ERP', delay: 1.2 },
+  { text: '✓ IA Aplicada (Gemini / Claude)', delay: 1.5 },
+];
+
 export default function Hero() {
+  const reducedMotion = useReducedMotion();
+  const isFine = usePointerDevice();
+  const containerRef = useRef(null);
+
+  // Parallax motion values
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const [sceneMouseX, setSceneMouseX] = useState(0);
+  const [sceneMouseY, setSceneMouseY] = useState(0);
+
+  // Parallax transforms for different layers
+  const bgX = useTransform(mouseX, [-1, 1], ['-8px', '8px']);
+  const bgY = useTransform(mouseY, [-1, 1], ['-6px', '6px']);
+  const cardX = useTransform(mouseX, [-1, 1], ['6px', '-6px']);
+  const cardY = useTransform(mouseY, [-1, 1], ['4px', '-4px']);
+
+  useEffect(() => {
+    if (!isFine || reducedMotion) return;
+    const handleMouse = (e) => {
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = (e.clientY / window.innerHeight) * 2 - 1;
+      mouseX.set(x);
+      mouseY.set(y);
+      setSceneMouseX(x);
+      setSceneMouseY(y);
+    };
+    window.addEventListener('mousemove', handleMouse, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouse);
+  }, [isFine, reducedMotion]);
+
   return (
     <section
       id="home"
-      className="min-h-screen pt-28 pb-16 flex flex-col justify-center max-w-6xl mx-auto px-4 sm:px-6"
+      className="min-h-screen pt-28 pb-16 flex flex-col justify-center max-w-6xl mx-auto px-4 sm:px-6 relative overflow-hidden"
+      ref={containerRef}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-        {/* COLUMNA IZQUIERDA */}
+      {/* Parallax background layer — subtle geometric accent */}
+      {!reducedMotion && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          style={{ x: bgX, y: bgY }}
+          aria-hidden="true"
+        >
+          <div className="absolute top-1/4 right-10 w-64 h-64 rounded-full bg-accent/5 blur-3xl" />
+          <div className="absolute bottom-1/4 left-10 w-48 h-48 rounded-full bg-gold/5 blur-3xl" />
+        </motion.div>
+      )}
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
+        {/* ── COLUMNA IZQUIERDA — Texto principal ── */}
         <div className="lg:col-span-7 space-y-6">
-          {/* Badge pequeño arriba */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#131722] border border-[#1F2430] text-xs font-mono text-[#8B92A5]"
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Estudiante de Administración de Empresas</span>
-          </motion.div>
+          {/* Badge */}
+          <RevealOnScroll delay={0.1} blur={false}>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface border border-border-dark text-xs font-mono text-text-muted">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              Estudiante de Administración de Empresas — INACAP
+            </div>
+          </RevealOnScroll>
 
-          {/* Título grande en 3 líneas */}
-          <motion.h1
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2, ease: 'easeOut' }}
-            className="text-4xl sm:text-5xl lg:text-[3.5rem] font-sora font-bold tracking-tight text-[#E8EAED] leading-[1.12]"
-          >
-            Construyo procesos <br />
-            administrativos que <br />
-            <span className="text-accent drop-shadow-[0_0_25px_rgba(91,141,239,0.35)]">
-              funcionan.
-            </span>
-          </motion.h1>
+          {/* Título */}
+          <RevealOnScroll delay={0.2}>
+            <h1 className="font-sora font-bold text-4xl sm:text-5xl lg:text-6xl text-text-main leading-tight tracking-tight">
+              Construyo{' '}
+              <span className="text-accent">procesos</span>{' '}
+              <br className="hidden sm:block" />
+              administrativos{' '}
+              <br className="hidden sm:block" />
+              que{' '}
+              <span className="relative inline-block">
+                funcionan.
+                <motion.span
+                  className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-accent to-accent/0 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: reducedMotion ? '100%' : '100%' }}
+                  transition={{ delay: 0.8, duration: 0.8, ease: 'easeOut' }}
+                />
+              </span>
+            </h1>
+          </RevealOnScroll>
 
-          {/* Párrafo de 2 líneas */}
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut' }}
-            className="text-base sm:text-lg text-[#8B92A5] leading-relaxed max-w-xl"
-          >
-            En última etapa de Ingeniería en Administración de Empresas en INACAP, con sólida experiencia liderando equipos de más de 7 personas y optimizando la gestión operativa.
-          </motion.p>
+          {/* Bio */}
+          <RevealOnScroll delay={0.3}>
+            <p className="text-text-muted text-base sm:text-lg leading-relaxed max-w-xl">
+              En etapa final de Ingeniería en Administración de Empresas en INACAP.
+              Lideré equipos de <strong className="text-text-main">7+ personas</strong>,
+              desarrollé soluciones con <strong className="text-text-main">IA aplicada</strong> y
+              construí herramientas que simplifican la gestión operativa real.
+            </p>
+          </RevealOnScroll>
 
-          {/* Dos botones */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4, ease: 'easeOut' }}
-            className="pt-2 flex flex-wrap items-center gap-4"
-          >
-            <a
-              href="#portfolio"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-accent text-[#0B0E14] font-sora font-semibold text-sm hover:bg-accent-hover hover:shadow-[0_0_25px_rgba(91,141,239,0.4)] transition-all"
-            >
-              <span>Ver Portfolio</span>
-              <ArrowDown size={16} />
-            </a>
-            <a
-              href="#contact"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#131722] text-[#E8EAED] font-sora font-medium text-sm border border-[#1F2430] hover:border-accent/60 hover:text-white transition-all"
-            >
-              <span>Contactarme</span>
-            </a>
-          </motion.div>
+          {/* CTAs */}
+          <RevealOnScroll delay={0.4}>
+            <div className="flex flex-wrap gap-3">
+              <MagneticButton>
+                <a
+                  href="#portfolio"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-white font-semibold text-sm transition-all duration-200 shadow-accent hover:shadow-accent-lg"
+                >
+                  Ver Portfolio
+                  <ArrowDown size={14} className="rotate-[-90deg]" />
+                </a>
+              </MagneticButton>
+              <MagneticButton>
+                <a
+                  href="#contact"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface border border-border-dark hover:border-accent/50 text-text-main font-semibold text-sm transition-all duration-200"
+                >
+                  Contactarme
+                </a>
+              </MagneticButton>
+              <MagneticButton>
+                <a
+                  href="/cv"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-transparent border border-border-dark hover:border-gold/50 text-text-muted hover:text-gold font-semibold text-sm transition-all duration-200"
+                >
+                  Ver CV
+                </a>
+              </MagneticButton>
+            </div>
+          </RevealOnScroll>
 
-          {/* Fila de íconos sociales */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5, ease: 'easeOut' }}
-            className="pt-4 flex items-center gap-4 border-t border-[#1F2430]/60 text-[#8B92A5]"
-          >
-            <span className="font-mono text-xs text-[#8B92A5]">Social:</span>
-            <a
-              href="https://linkedin.com/in/isaac-patricio-diaz-14041b3b3"
-              target="_blank"
-              rel="noreferrer"
-              className="p-2.5 rounded-xl bg-[#131722] border border-[#1F2430] hover:border-accent hover:text-accent transition-colors"
-              aria-label="LinkedIn"
-            >
-              <Linkedin size={18} />
-            </a>
-            <a
-              href="https://github.com/nexuslabsaihq-svg/personal-platform-ISAAC"
-              target="_blank"
-              rel="noreferrer"
-              className="p-2.5 rounded-xl bg-[#131722] border border-[#1F2430] hover:border-accent hover:text-accent transition-colors"
-              aria-label="GitHub"
-            >
-              <Github size={18} />
-            </a>
-            <a
-              href="mailto:isaacipp1709@gmail.com"
-              className="p-2.5 rounded-xl bg-[#131722] border border-[#1F2430] hover:border-accent hover:text-accent transition-colors"
-              aria-label="Email"
-            >
-              <Mail size={18} />
-            </a>
-          </motion.div>
+          {/* Social links */}
+          <RevealOnScroll delay={0.5}>
+            <div className="flex items-center gap-4">
+              <a
+                href="https://www.linkedin.com/in/isaacpasten"
+                target="_blank" rel="noreferrer"
+                className="text-text-muted hover:text-accent transition-colors"
+                aria-label="LinkedIn de Isaac Pastén"
+              >
+                <Linkedin size={18} />
+              </a>
+              <a
+                href="https://github.com/nexuslabsaihq-svg"
+                target="_blank" rel="noreferrer"
+                className="text-text-muted hover:text-accent transition-colors"
+                aria-label="GitHub de Isaac Pastén"
+              >
+                <Github size={18} />
+              </a>
+              <a
+                href="mailto:isaacpasten.dev@gmail.com"
+                className="text-text-muted hover:text-accent transition-colors"
+                aria-label="Email de Isaac Pastén"
+              >
+                <Mail size={18} />
+              </a>
+              <span className="h-px flex-1 max-w-16 bg-border-dark" />
+              <span className="text-xs font-mono text-text-muted">Macul, Santiago</span>
+            </div>
+          </RevealOnScroll>
+
+          {/* Terminal snippet */}
+          <RevealOnScroll delay={0.6}>
+            <div className="rounded-xl bg-surface border border-border-dark p-4 max-w-sm">
+              <div className="flex items-center gap-1.5 mb-3">
+                <Terminal size={12} className="text-text-muted" />
+                <span className="text-xs font-mono text-text-muted">stack.sh</span>
+                <div className="ml-auto flex gap-1">
+                  {['bg-red-500/60', 'bg-yellow-500/60', 'bg-emerald-500/60'].map((c, i) => (
+                    <div key={i} className={`w-2 h-2 rounded-full ${c}`} />
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-1">
+                {TERMINAL_LINES.map((line, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: reducedMotion ? 0 : line.delay, duration: 0.3 }}
+                    className="text-xs font-mono text-emerald-400"
+                  >
+                    {line.text}
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </RevealOnScroll>
         </div>
 
-        {/* COLUMNA DERECHA */}
-        <div className="lg:col-span-5 flex flex-col items-center justify-center">
-          <div className="relative w-full max-w-[340px] sm:max-w-[380px] flex flex-col items-center">
-            {/* Glow / Aura en acento primario detrás de la foto */}
-            <div className="absolute top-12 w-64 h-64 sm:w-72 sm:h-72 rounded-full bg-accent/20 blur-3xl -z-10 pointer-events-none" />
+        {/* ── COLUMNA DERECHA — Foto + 3D decorativo ── */}
+        <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
+          {/* 3D Scene — fondo decorativo, detrás de la foto */}
+          <motion.div
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            style={{ x: bgX, y: bgY }}
+            aria-hidden="true"
+          >
+            <div className="w-full h-full opacity-60">
+              <Suspense fallback={null}>
+                <HeroScene mouseX={sceneMouseX} mouseY={sceneMouseY} />
+              </Suspense>
+            </div>
+          </motion.div>
 
-            {/* Foto real dentro de contenedor ovalado / circular */}
-            <div className="relative w-60 h-60 sm:w-72 sm:h-72 rounded-full p-2 bg-gradient-to-b from-[#1F2430] via-[#131722] to-[#1F2430]/40 border border-[#1F2430] shadow-2xl overflow-hidden">
+          {/* Foto de perfil — elemento principal */}
+          <motion.div
+            style={!reducedMotion ? { x: cardX, y: cardY } : {}}
+            className="relative z-10"
+          >
+            {/* Aura luminosa */}
+            <div className="absolute inset-0 rounded-2xl bg-accent/20 blur-2xl scale-110" aria-hidden="true" />
+            
+            {/* Marco de la foto */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+              className="relative rounded-2xl overflow-hidden border-2 border-accent/40 shadow-accent-lg"
+              style={{ width: 260, height: 320 }}
+            >
               <img
                 src="/images/profile.jpg"
-                alt="Isaac Patricio Pastén Díaz"
-                className="w-full h-full object-cover rounded-full"
-                onError={(e) => {
-                  // Fallback directo si la ruta tuviera alguna variación
-                  if (e.target.src.indexOf('profile.jpg.JPG') === -1) {
-                    e.target.src = '/profile.jpg.JPG';
-                  }
-                }}
+                alt="Isaac Patricio Pastén Díaz — Estudiante de Administración de Empresas"
+                className="w-full h-full object-cover object-center"
+                loading="eager"
               />
-            </div>
+              {/* Overlay sutil de color */}
+              <div className="absolute inset-0 bg-gradient-to-t from-base/60 via-transparent to-transparent" />
+            </motion.div>
 
-            {/* 3 Cards Flotantes Superpuestas a la foto */}
-            {/* Card 1: 7+ Personas lideradas (Arriba Izquierda) */}
-            <FloatingStat
-              value={7}
-              suffix="+"
-              label="Personas lideradas"
-              icon={Users}
-              className="absolute -top-3 -left-2 sm:-left-6 z-20"
-            />
+            {/* Floating stats — paralax ligero */}
+            <motion.div
+              style={!reducedMotion ? { x: cardX, y: cardY } : {}}
+              className="absolute -bottom-4 -right-4 sm:-right-8"
+            >
+              <FloatingStat
+                value={7}
+                suffix="+"
+                label="Personas lideradas"
+                sublabel="Proyecto académico real"
+                icon={Users}
+              />
+            </motion.div>
 
-            {/* Card 2: 8 Certificaciones INACAP (Medio Derecha) */}
-            <FloatingStat
-              value={8}
-              label="Certificaciones"
-              sublabel="INACAP"
-              icon={Award}
-              className="absolute top-28 -right-2 sm:-right-6 z-20"
-            />
+            <motion.div
+              style={!reducedMotion ? { x: cardX, y: cardY } : {}}
+              className="absolute -top-4 -left-4 sm:-left-8"
+            >
+              <FloatingStat
+                value={8}
+                label="Certificaciones INACAP"
+                sublabel="Todas verificadas"
+                icon={Award}
+              />
+            </motion.div>
 
-            {/* Card 3: 5.9 Nota de egreso (Abajo Izquierda) */}
-            <FloatingStat
-              value={5.9}
-              decimals={1}
-              label="Nota de egreso"
-              sublabel="Ranking N°2"
-              icon={Trophy}
-              className="absolute bottom-16 -left-2 sm:-left-6 z-20"
-            />
-
-            {/* Card pequeña debajo de la foto estilo code snippet: "Herramientas" */}
-            <div className="w-full mt-6 p-3.5 rounded-xl bg-[#131722]/95 border border-[#1F2430] shadow-xl z-20">
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#1F2430]/60">
-                <div className="flex items-center gap-1.5 font-mono text-[11px] text-[#8B92A5]">
-                  <Terminal size={13} className="text-accent" />
-                  <span className="text-[#E8EAED] font-medium">Herramientas</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-red-500/60" />
-                  <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
-                  <div className="w-2 h-2 rounded-full bg-green-500/60" />
-                </div>
-              </div>
-
-              <div className="space-y-1.5 font-mono text-xs">
-                <div className="flex items-center gap-2 text-[#E8EAED]">
-                  <CheckCircle2 size={13} className="text-accent shrink-0" />
-                  <span>Excel Intermedio</span>
-                </div>
-                <div className="flex items-center gap-2 text-[#E8EAED]">
-                  <CheckCircle2 size={13} className="text-accent shrink-0" />
-                  <span>Power BI Básico</span>
-                </div>
-                <div className="flex items-center gap-2 text-[#E8EAED]">
-                  <CheckCircle2 size={13} className="text-accent shrink-0" />
-                  <span>HCMFRONT</span>
-                </div>
-              </div>
-            </div>
-          </div>
+            <motion.div
+              style={!reducedMotion ? { x: cardX, y: cardY } : {}}
+              className="absolute top-1/2 -right-4 sm:-right-10 -translate-y-1/2"
+            >
+              <FloatingStat
+                value={5.9}
+                decimals={1}
+                label="Nota de egreso"
+                sublabel="Ranking N°2 de cohorte"
+                icon={Trophy}
+              />
+            </motion.div>
+          </motion.div>
         </div>
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        animate={reducedMotion ? {} : { y: [0, 8, 0] }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <ArrowDown size={18} className="text-text-muted" />
+      </motion.div>
     </section>
   );
 }
