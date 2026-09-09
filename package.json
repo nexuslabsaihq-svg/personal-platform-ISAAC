@@ -1,7 +1,7 @@
 {
   "name": "personal-platform-isaac",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,16 +9,22 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^9.115.0",
+    "@react-three/fiber": "^8.17.10",
     "framer-motion": "^13.2.0",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.27.0",
+    "three": "^0.169.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.4",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.16",
-    "vite": "^5.4.11"
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.15",
+    "vite": "^5.4.10"
   }
 }
