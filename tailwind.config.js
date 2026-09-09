@@ -8,12 +8,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        base: '#F7F5F0',
+        base: '#F8F7F4',
         surface: '#FFFFFF',
         'surface-warm': '#FAF8F5',
-        'border-dark': 'rgba(15, 23, 42, 0.08)',
-        'border-subtle': 'rgba(15, 23, 42, 0.05)',
-        'text-main': '#0F172A',
+        'border-dark': 'rgba(10, 17, 40, 0.08)',
+        'border-subtle': 'rgba(10, 17, 40, 0.05)',
+        'text-main': '#0A1128',
         'text-muted': '#475569',
         accent: {
           DEFAULT: '#2563EB',

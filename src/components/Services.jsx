@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Briefcase, BarChart3, Bot, ArrowRight, Sparkles } from 'lucide-react';
 import RevealOnScroll from './ui/RevealOnScroll';
 import MagneticButton from './ui/MagneticButton';
@@ -90,7 +90,7 @@ export default function Services() {
 
         {/* Apple Wallet Stack */}
         <RevealOnScroll delay={0.1}>
-          <AppleWalletStack items={SERVICES_PASSES} peekHeight={72} expandedOffset={280} />
+          <AppleWalletStack items={SERVICES_PASSES} peekHeight={72} expandedOffset={280} stackTheme="blue" />
         </RevealOnScroll>
 
         {/* Bottom CTA Card */}

@@ -185,9 +185,9 @@ export default function Hero() {
                 </a>
               </MagneticButton>
               <MagneticButton>
-                <a
+                  <a
                   href="#contact"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface border border-border-dark hover:border-accent/50 text-text-main font-semibold text-sm transition-all duration-200"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/90 border border-slate-200 hover:border-blue-300 text-slate-800 font-semibold text-sm transition-all duration-200"
                 >
                   Contactarme
                 </a>
@@ -287,22 +287,25 @@ export default function Hero() {
             <div className="absolute inset-0 rounded-2xl bg-accent/20 blur-2xl scale-110" aria-hidden="true" />
             
             {/* Marco de la foto */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-              className="relative rounded-2xl overflow-hidden border-2 border-accent/40 shadow-accent-lg"
-              style={{ width: 260, height: 320 }}
-            >
-              <img
-                src="/images/profile.jpg"
-                alt="Isaac Patricio Pastén Díaz — Estudiante de Administración de Empresas"
-                className="w-full h-full object-cover object-center"
-                loading="eager"
-              />
-              {/* Overlay sutil de color */}
-              <div className="absolute inset-0 bg-gradient-to-t from-base/60 via-transparent to-transparent" />
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.7, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+                className="relative overflow-hidden border border-slate-200 shadow-xl"
+                style={{ width: 260, height: 320, borderRadius: '2rem' }} // squircle approximation
+              >
+                <img
+                  src="/images/profile.jpg"
+                  alt="Isaac Patricio Pastén Díaz — Estudiante de Administración de Empresas"
+                  className="w-full h-full object-cover object-[center_20%]"
+                  loading="eager"
+                  draggable={false}
+                  onDragStart={(e) => e.preventDefault()}
+                  onContextMenu={(e) => e.preventDefault()}
+                />
+                {/* Overlay sutil de color */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/10 via-transparent to-transparent pointer-events-none" />
+              </motion.div>
 
             {/* Floating stats — paralax ligero */}
             <motion.div
@@ -338,7 +341,7 @@ export default function Hero() {
                 value={5.9}
                 decimals={1}
                 label="Nota de egreso"
-                sublabel="Ranking N°2 de cohorte"
+                sublabel="Ranking N°2 de 3 egresados"
                 icon={Trophy}
               />
             </motion.div>

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Award, Calendar, Hash, ExternalLink, CheckCircle2, Filter, ShieldCheck } from 'lucide-react';
 import RevealOnScroll from './ui/RevealOnScroll';
 import AppleWalletStack from './ui/AppleWalletStack';
@@ -200,7 +200,8 @@ export default function Certifications() {
             key={selectedYear} // Reset animation cleanly on filter change
             items={walletCards}
             peekHeight={68}
-            expandedOffset={260}
+            expandedOffset={250}
+            stackTheme="gold"
           />
         </RevealOnScroll>
       </div>

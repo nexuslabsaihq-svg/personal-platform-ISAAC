@@ -7,6 +7,7 @@ import Portfolio from './components/Portfolio';
 import Services from './components/Services';
 import Process from './components/Process';
 import Certifications from './components/Certifications';
+import Gallery from './components/Gallery';
 import HobbiesLanguages from './components/HobbiesLanguages';
 import Testimonials from './components/Testimonials';
 import Numbers from './components/Numbers';
@@ -41,6 +42,7 @@ function MainSite() {
         <Numbers />
         <Process />
         <Certifications />
+        <Gallery />
         <HobbiesLanguages />
         <Testimonials />
         <Contact />

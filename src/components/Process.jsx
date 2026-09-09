@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Search, CalendarDays, Play, ShieldAlert, CheckCircle, CheckCheck, Layers } from 'lucide-react';
 import RevealOnScroll from './ui/RevealOnScroll';
 import AppleWalletStack from './ui/AppleWalletStack';
@@ -129,6 +129,7 @@ export default function Process() {
             items={METHODOLOGY_PASSES}
             peekHeight={68}
             expandedOffset={270}
+            stackTheme="green"
           />
         </RevealOnScroll>
       </div>

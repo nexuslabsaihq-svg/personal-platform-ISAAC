@@ -8,12 +8,14 @@
     color-scheme: light;
   }
   body {
-    background-color: #F7F5F0;
-    color: #0F172A;
+    background-color: #F8F7F4;
+    color: #0A1128;
     font-family: 'Inter', sans-serif;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.025em; /* tracking-tight */
   }
 }
 
@@ -22,7 +24,7 @@
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F7F5F0;
+  background: #F8F7F4;
 }
 ::-webkit-scrollbar-thumb {
   background: #CBD5E1;

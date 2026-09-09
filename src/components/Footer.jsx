@@ -28,6 +28,16 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-slate-200/60 py-12 max-w-6xl mx-auto px-4 sm:px-6 relative">
+            {/* Frase final de cierre */}
+      <div className="mb-12 text-center">
+        <h2 className="text-xl sm:text-2xl font-sora font-bold tracking-tight text-slate-900 mb-3">
+          "Los mejores procesos son los que se pueden automatizar."
+        </h2>
+        <p className="text-sm font-mono text-blue-600 font-semibold">
+          — Isaac Pastén Díaz
+        </p>
+      </div>
+
       <div className="flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Brand */}
         <div className="flex items-center gap-2.5">

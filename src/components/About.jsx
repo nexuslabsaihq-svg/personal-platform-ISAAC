@@ -67,9 +67,9 @@ export default function About() {
         </h2>
       </RevealOnScroll>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         {/* ── Columna izquierda — Bio y datos rápidos ── */}
-        <div className="space-y-8">
+        <div className="lg:col-span-7 space-y-8">
           <RevealOnScroll delay={0.1}>
             <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
@@ -128,7 +128,7 @@ export default function About() {
 
         {/* ── Columna derecha — Skills con barras ── */}
         <RevealOnScroll delay={0.15}>
-          <div id="skills" className="space-y-6">
+          <div id="skills" className="lg:col-span-5 space-y-6">
             <h3 className="text-lg font-sora font-semibold text-text-main">
               Mi Expertise
             </h3>
