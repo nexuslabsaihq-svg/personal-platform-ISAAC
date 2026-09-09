@@ -26,7 +26,7 @@ const PROJECTS = [
   {
     title: 'Ecosistema NOSTRADAMUZ',
     badge: 'IA Aplicada',
-    badgeColor: 'bg-purple-brand/15 text-purple-brand border-purple-brand/40',
+    badgeColor: 'bg-violet-custom/15 text-violet-custom border-violet-custom/40',
     description: 'Sistema propio de orquestación de agentes de IA con 8+ skills especializadas para automatización de flujos y análisis de contexto empresarial avanzado.',
     tags: ['Claude', 'Gemini', 'Prompt Engineering'],
     link: 'https://github.com/nexuslabsaihq-svg/personal-platform-ISAAC',
@@ -36,7 +36,7 @@ const PROJECTS = [
   {
     title: 'Análisis UX — WOM Chile',
     badge: 'Académico',
-    badgeColor: 'bg-emerald-brand/15 text-emerald-brand border-emerald-brand/40',
+    badgeColor: 'bg-green-custom/15 text-green-custom border-green-custom/40',
     description: 'Informe de evaluación sumativa y tangibilización de servicios enfocado en satisfacción, retención de clientes y experiencia de usuario en telecomunicaciones.',
     tags: ['INACAP', 'Experiencia del Usuario'],
     link: '#',
