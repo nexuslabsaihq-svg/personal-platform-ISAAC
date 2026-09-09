@@ -45,10 +45,10 @@ const COLOR_MAP = {
     cta: 'text-gold',
   },
   purple: {
-    icon: 'bg-purple-brand/10 border-purple-brand/30 text-purple-brand',
-    tag: 'bg-purple-brand/10 text-purple-brand border-purple-brand/20',
-    hover: 'hover:border-purple-brand/50',
-    cta: 'text-purple-brand',
+    icon: 'bg-violet-custom/10 border-violet-custom/30 text-violet-custom',
+    tag: 'bg-violet-custom/10 text-violet-custom border-violet-custom/20',
+    hover: 'hover:border-violet-custom/50',
+    cta: 'text-violet-custom',
   },
 };
 
