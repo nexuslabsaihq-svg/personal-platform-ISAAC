@@ -122,11 +122,11 @@ const SOLUCIONES = [
 
 export default function FinanceNexusPage() {
   return (
-    <div className="min-h-screen bg-[#0B0E14] font-inter">
+    <div className="min-h-screen bg-[#F7F5F0] text-slate-900 font-inter">
       {/* Nav */}
-      <div className="border-b border-[#262C3A] bg-[#151A24]/80 backdrop-blur-md sticky top-0 z-40">
+      <div className="border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <a href="/" className="inline-flex items-center gap-2 text-sm text-[#A8AFC0] hover:text-[#F5F6F8] transition-colors">
+          <a href="/" className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900 transition-colors">
             <ArrowLeft size={14} />
             Volver al portafolio
           </a>
@@ -134,7 +134,7 @@ export default function FinanceNexusPage() {
             href="https://finance-nexus.vercel.app"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#6B9BFF]/10 border border-[#6B9BFF]/30 text-[#6B9BFF] text-sm font-semibold hover:bg-[#6B9BFF]/20 transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-sm font-semibold hover:bg-blue-100 transition-all shadow-sm"
           >
             <ExternalLink size={13} />
             Visitar proyecto

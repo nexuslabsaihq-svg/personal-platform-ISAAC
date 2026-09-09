@@ -1,140 +1,116 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Briefcase, BarChart3, Bot, ArrowRight } from 'lucide-react';
+﻿import React from 'react';
+import { Briefcase, BarChart3, Bot, ArrowRight, Sparkles } from 'lucide-react';
 import RevealOnScroll from './ui/RevealOnScroll';
 import MagneticButton from './ui/MagneticButton';
+import AppleWalletStack from './ui/AppleWalletStack';
 
-const SERVICES = [
+const SERVICES_PASSES = [
   {
-    icon: Briefcase,
+    id: 'srv-1',
+    badge: 'OPERACIONAL',
+    category: 'Gestión de Operaciones',
     title: 'Asesoría Administrativa para PYMEs',
+    icon: Briefcase,
+    accent: 'blue',
     description:
-      'Diagnóstico y organización de procesos administrativos para pequeñas y medianas empresas. Desde la estructuración de flujos de trabajo hasta la implementación de controles básicos de gestión operativa.',
-    tags: ['Diagnóstico', 'Procesos', 'Control de gestión'],
-    color: 'accent',
+      'Diagnóstico integral y estructuración de flujos de trabajo administrativos para pequeñas y medianas empresas. Implementación de controles básicos de gestión operativa, asignación clara de responsabilidades y eliminación de cuellos de botella para elevar la productividad del equipo.',
+    tags: ['Diagnóstico Operativo', 'Mapeo de Procesos', 'Control de Gestión', 'Flujos de Trabajo'],
+    meta: [
+      { label: 'Modalidad', value: 'Remoto o Híbrido' },
+      { label: 'Entregable', value: 'Manual de Procesos + Diagnóstico' },
+      { label: 'Plazo Típico', value: '2 a 4 semanas' },
+    ],
+    action: {
+      label: 'Consultar Disponibilidad',
+      href: '#contact',
+    },
   },
   {
-    icon: BarChart3,
+    id: 'srv-2',
+    badge: 'FINANCIERO',
+    category: 'Finanzas & Tesorería',
     title: 'Organización de Procesos y Control de Caja',
+    icon: BarChart3,
+    accent: 'gold',
     description:
-      'Diseño de sistemas de registro, control de caja chica, conciliaciones básicas y organización de documentación contable y administrativa para empresas en crecimiento.',
-    tags: ['Caja chica', 'Documentación', 'Conciliación'],
-    color: 'gold',
+      'Diseño e implementación de sistemas rigurosos de control para caja chica, arqueos sistemáticos, conciliaciones bancarias y custodia digital de documentación tributaria. Otorga visibilidad en tiempo real de la liquidez para una toma de decisiones informada.',
+    tags: ['Control de Caja Chica', 'Conciliación Bancaria', 'Normativa SII', 'Flujo de Liquidez'],
+    meta: [
+      { label: 'Enfoque', value: 'Control de caja & arqueos' },
+      { label: 'Herramientas', value: 'Planillas estructuradas + ERP' },
+      { label: 'Beneficio', value: 'Orden financiero y cero descuadres' },
+    ],
+    action: {
+      label: 'Solicitar Asesoría Financiera',
+      href: '#contact',
+    },
   },
   {
-    icon: Bot,
+    id: 'srv-3',
+    badge: 'INNOVACIÓN IA',
+    category: 'Inteligencia Artificial Aplicada',
     title: 'Automatización con IA para Tareas Administrativas',
+    icon: Bot,
+    accent: 'purple',
     description:
-      'Implementación de herramientas de Inteligencia Artificial (Gemini, Claude) para automatizar tareas repetitivas: redacción de documentos, análisis de datos, generación de reportes y flujos de decisión asistidos.',
-    tags: ['Gemini API', 'Prompt engineering', 'Automatización'],
-    color: 'purple',
+      'Implementación de Inteligencia Artificial (Gemini API, modelos LLM y agentes) para automatizar labores operativas repetitivas: redacción de informes ejecutivos, análisis asistido de facturación, resúmenes contables y asistentes virtuales para el equipo de trabajo.',
+    tags: ['Gemini API', 'Prompt Engineering', 'Procesamiento de Documentos', 'Agentes Autónomos'],
+    meta: [
+      { label: 'Tecnología', value: 'Google Gemini API + React' },
+      { label: 'Ahorro Estimado', value: 'Hasta 70% de tiempo operativo' },
+      { label: 'Aplicación', value: 'Solución adaptada a tu flujo diario' },
+    ],
+    action: {
+      label: 'Explorar Soluciones con IA',
+      href: '#contact',
+    },
   },
 ];
 
-const COLOR_MAP = {
-  accent: {
-    icon: 'bg-accent/10 border-accent/30 text-accent',
-    tag: 'bg-accent/10 text-accent border-accent/20',
-    hover: 'hover:border-accent/50',
-    cta: 'text-accent',
-  },
-  gold: {
-    icon: 'bg-gold/10 border-gold/30 text-gold',
-    tag: 'bg-gold/10 text-gold border-gold/20',
-    hover: 'hover:border-gold/50',
-    cta: 'text-gold',
-  },
-  purple: {
-    icon: 'bg-violet-custom/10 border-violet-custom/30 text-violet-custom',
-    tag: 'bg-violet-custom/10 text-violet-custom border-violet-custom/20',
-    hover: 'hover:border-violet-custom/50',
-    cta: 'text-violet-custom',
-  },
-};
-
 export default function Services() {
   return (
-    <section id="servicios" className="py-24 border-t border-border-dark/40">
+    <section id="servicios" className="py-24 border-t border-slate-200/60 relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <RevealOnScroll>
-          <div className="mb-12">
-            <p className="font-mono text-xs font-semibold tracking-wider text-accent uppercase mb-2">
-              // 04. Servicios
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-sora font-bold tracking-tight text-text-main mb-3">
+          <div className="mb-14 text-center max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 font-mono text-xs font-semibold uppercase mb-3">
+              <Sparkles size={12} />
+              // 04. Servicios & Capacidades
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-sora font-bold tracking-tight text-slate-900 mb-3">
               ¿En qué puedo ayudarte?
             </h2>
-            <p className="text-text-muted max-w-2xl">
-              Ofrezco asesoría y servicios freelance orientados a la gestión operativa eficiente.
-              Sin promesas infladas — trabajo concreto, metodología clara.
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              Asesoría profesional y desarrollo de soluciones orientadas a la optimización de procesos y el orden administrativo.
+              Sin promesas infladas: trabajo medible, metodología rigurosa y tecnología moderna.
             </p>
           </div>
         </RevealOnScroll>
 
-        {/* Service Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
-          {SERVICES.map((service, i) => {
-            const { icon: Icon } = service;
-            const colors = COLOR_MAP[service.color];
-            return (
-              <RevealOnScroll key={service.title} delay={i * 0.1}>
-                <div className={`group flex flex-col h-full p-6 rounded-2xl bg-surface border border-border-dark ${colors.hover} transition-all duration-300 hover:shadow-card-hover`}>
-                  {/* Icon */}
-                  <div className={`w-12 h-12 rounded-xl border flex items-center justify-center mb-5 ${colors.icon} group-hover:scale-110 transition-transform duration-200`}>
-                    <Icon size={22} />
-                  </div>
+        {/* Apple Wallet Stack */}
+        <RevealOnScroll delay={0.1}>
+          <AppleWalletStack items={SERVICES_PASSES} peekHeight={72} expandedOffset={280} />
+        </RevealOnScroll>
 
-                  {/* Title */}
-                  <h3 className="font-sora font-bold text-lg text-text-main mb-3 leading-snug group-hover:text-white transition-colors">
-                    {service.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-sm text-text-muted leading-relaxed flex-1 mb-5">
-                    {service.description}
-                  </p>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 mb-5">
-                    {service.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className={`px-2 py-0.5 rounded-md border text-[11px] font-mono ${colors.tag}`}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* CTA */}
-                  <a
-                    href="#contact"
-                    className={`inline-flex items-center gap-1.5 text-sm font-semibold ${colors.cta} hover:text-white transition-colors group/link mt-auto`}
-                  >
-                    Consultar disponibilidad
-                    <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
-                  </a>
-                </div>
-              </RevealOnScroll>
-            );
-          })}
-        </div>
-
-        {/* Bottom note */}
-        <RevealOnScroll delay={0.4}>
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl bg-surface border border-border-dark">
-            <p className="text-sm text-text-muted text-center sm:text-left">
-              ¿Tienes un proyecto específico en mente? Cuéntame qué necesitas y
-              vemos si encajamos.
-            </p>
+        {/* Bottom CTA Card */}
+        <RevealOnScroll delay={0.25}>
+          <div className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-5 p-6 rounded-2xl bg-white/90 border border-slate-200/80 shadow-card">
+            <div>
+              <h3 className="font-sora font-bold text-base text-slate-900 mb-1">
+                ¿Tienes un requerimiento especial o un proyecto en marcha?
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600">
+                Cuéntame los desafíos administrativos o tecnológicos de tu organización y evaluemos cómo resolverlos.
+              </p>
+            </div>
             <MagneticButton>
               <a
                 href="#contact"
-                className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-white font-semibold text-sm transition-all duration-200 shadow-accent"
+                className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-all duration-200 shadow-md shadow-blue-500/20 hover:shadow-lg"
               >
-                Contactarme
-                <ArrowRight size={14} />
+                Conversar Ahora
+                <ArrowRight size={15} />
               </a>
             </MagneticButton>
           </div>

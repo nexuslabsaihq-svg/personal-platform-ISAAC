@@ -113,7 +113,7 @@ function AccordionSection({ title, icon: Icon, children, defaultOpen = false }) 
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <div className="px-6 py-5 bg-[#0B0E14] border-t border-[#262C3A]">
+            <div className="px-6 py-5 bg-white border-t border-slate-200">
               {children}
             </div>
           </motion.div>
@@ -129,24 +129,24 @@ function AnimatedSkillBar({ name, level, category, delay = 0 }) {
   const reducedMotion = useReducedMotion();
 
   const catColor = {
-    'Herramientas': '#6B9BFF',
-    'Blandas': '#E5C158',
-    'Tecnología': '#9B7FFF',
-    'Metodologías': '#4ADE80',
-  }[category] ?? '#6B9BFF';
+    'Herramientas': '#2563EB',
+    'Blandas': '#D97706',
+    'Tecnología': '#7C3AED',
+    'Metodologías': '#059669',
+  }[category] ?? '#2563EB';
 
   return (
     <div ref={ref} className="space-y-1.5">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#F5F6F8]">{name}</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#151A24] border border-[#262C3A] text-[#A8AFC0]">
+          <span className="text-sm font-medium text-slate-900">{name}</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-600">
             {category}
           </span>
         </div>
-        <span className="text-xs font-mono text-[#A8AFC0]">{level}%</span>
+        <span className="text-xs font-mono text-slate-500">{level}%</span>
       </div>
-      <div className="h-1.5 w-full rounded-full bg-[#151A24] border border-[#262C3A] overflow-hidden">
+      <div className="h-1.5 w-full rounded-full bg-slate-100 border border-slate-200 overflow-hidden">
         <motion.div
           className="h-full rounded-full"
           style={{ backgroundColor: catColor }}
@@ -163,20 +163,20 @@ function AnimatedSkillBar({ name, level, category, delay = 0 }) {
 
 export default function CVPage() {
   return (
-    <div className="min-h-screen bg-[#0B0E14] font-inter">
-      {/* Header del CV — distinto al resto del sitio */}
-      <div className="border-b border-[#262C3A] bg-[#151A24]/80 backdrop-blur-md sticky top-0 z-40">
+    <div className="min-h-screen bg-[#F7F5F0] text-slate-900 font-inter">
+      {/* Header del CV */}
+      <div className="border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <a
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-[#A8AFC0] hover:text-[#F5F6F8] transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900 transition-colors"
           >
             <ArrowLeft size={14} />
             Volver al portafolio
           </a>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-[#A8AFC0]">Curriculum Vitae — Documento vivo</span>
-            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-xs font-mono text-slate-500">Curriculum Vitae — Documento vivo</span>
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           </div>
         </div>
       </div>

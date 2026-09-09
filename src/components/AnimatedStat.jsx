@@ -37,19 +37,19 @@ export default function AnimatedStat({ value, suffix = '', prefix = '', decimals
   return (
     <div
       ref={ref}
-      className="p-4 sm:p-5 rounded-xl bg-[#131722]/80 border border-[#1F2430]/60 flex flex-col justify-between hover:border-gold/30 hover:shadow-[0_4px_20px_-4px_rgba(212,175,55,0.12)] transition-all group"
+      className="p-4 sm:p-5 rounded-xl bg-white/90 border border-slate-200/80 flex flex-col justify-between hover:border-amber-400/60 shadow-card hover:shadow-card-hover transition-all group"
     >
       <div className="flex items-center justify-between mb-2">
-        <span className="text-2xl sm:text-3xl font-sora font-bold text-gold tracking-tight group-hover:scale-105 transition-transform">
+        <span className="text-2xl sm:text-3xl font-sora font-bold text-amber-700 tracking-tight group-hover:scale-105 transition-transform">
           {prefix}{formatted}{suffix}
         </span>
         {Icon && (
-          <div className="p-1.5 rounded-lg bg-[#1F2430]/40 text-gold/80">
+          <div className="p-1.5 rounded-lg bg-amber-50 border border-amber-200/60 text-amber-700">
             <Icon size={16} />
           </div>
         )}
       </div>
-      <p className="text-xs font-medium text-[#8B92A5] leading-snug">
+      <p className="text-xs font-semibold text-slate-600 leading-snug">
         {label}
       </p>
     </div>

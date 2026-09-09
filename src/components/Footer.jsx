@@ -27,18 +27,18 @@ export default function Footer() {
   };
 
   return (
-    <footer className="border-t border-[#1F2430]/40 py-12 max-w-6xl mx-auto px-4 sm:px-6 relative">
+    <footer className="border-t border-slate-200/60 py-12 max-w-6xl mx-auto px-4 sm:px-6 relative">
       <div className="flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Brand */}
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-[#131722] border border-[#1F2430] flex items-center justify-center font-sora font-bold text-xs text-accent">
+          <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center font-sora font-bold text-xs text-blue-600 shadow-sm">
             IP
           </div>
-          <span className="font-sora font-semibold text-sm text-[#E8EAED]">
+          <span className="font-sora font-semibold text-sm text-slate-900">
             Isaac Pastén
           </span>
-          <span className="text-[#1F2430]">•</span>
-          <span className="font-mono text-xs text-[#8B92A5]">
+          <span className="text-slate-300">•</span>
+          <span className="font-mono text-xs text-slate-500">
             Ing. Adm. Empresas
           </span>
         </div>
@@ -49,7 +49,7 @@ export default function Footer() {
             <a
               key={link.href}
               href={link.href}
-              className="text-xs font-mono text-[#8B92A5] hover:text-accent transition-colors"
+              className="text-xs font-mono text-slate-500 hover:text-blue-600 transition-colors"
             >
               {link.label}
             </a>
@@ -57,7 +57,7 @@ export default function Footer() {
         </nav>
 
         {/* Copyright */}
-        <div className="text-xs font-mono text-[#8B92A5] text-center md:text-right">
+        <div className="text-xs font-mono text-slate-500 text-center md:text-right">
           © 2026 Isaac Pastén Díaz. Todos los derechos reservados.
         </div>
       </div>
@@ -73,7 +73,7 @@ export default function Footer() {
             exit={{ opacity: 0, scale: 0.8, y: 10 }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-accent text-[#0B0E14] flex items-center justify-center shadow-lg shadow-accent/25 hover:bg-accent-hover transition-colors"
+            className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/25 hover:bg-blue-700 transition-colors"
             aria-label="Volver arriba"
           >
             <ArrowUp size={18} />

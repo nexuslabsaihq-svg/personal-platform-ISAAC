@@ -68,8 +68,8 @@ export default function CustomCursor() {
   if (!isFine || reducedMotion) return null;
 
   const ringSize = variant === 'link' ? 48 : variant === 'project' ? 56 : 32;
-  const ringColor = variant === 'project' ? '#E5C158' : '#6B9BFF';
-  const dotColor = variant === 'project' ? '#E5C158' : '#6B9BFF';
+  const ringColor = variant === 'project' ? '#D97706' : '#2563EB';
+  const dotColor = variant === 'project' ? '#D97706' : '#2563EB';
 
   return (
     <>

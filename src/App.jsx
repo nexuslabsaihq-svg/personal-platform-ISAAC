@@ -13,7 +13,7 @@ import Numbers from './components/Numbers';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import CustomCursor from './components/ui/CustomCursor';
-import SectionDivider from './components/ui/SectionDivider';
+import AnimatedMeshBackground from './components/ui/AnimatedMeshBackground';
 
 // Lazy-loaded pages
 const CVPage = lazy(() => import('./pages/CVPage'));
@@ -21,36 +21,28 @@ const FinanceNexusPage = lazy(() => import('./pages/FinanceNexusPage'));
 
 function PageLoader() {
   return (
-    <div className="min-h-screen bg-base flex items-center justify-center">
-      <div className="w-8 h-8 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
+    <div className="min-h-screen bg-[#F7F5F0] flex items-center justify-center">
+      <div className="w-8 h-8 rounded-full border-2 border-blue-600/30 border-t-blue-600 animate-spin" />
     </div>
   );
 }
 
 function MainSite() {
   return (
-    <div className="bg-base text-text-main">
+    <div className="bg-[#F7F5F0] text-slate-900 min-h-screen relative selection:bg-blue-600/20 selection:text-slate-900">
+      <AnimatedMeshBackground />
       <CustomCursor />
       <Navbar />
-      <main>
+      <main className="relative z-10">
         <Hero />
-        <SectionDivider fromColor="#0B0E14" toColor="#151A24" variant="wave" />
         <About />
-        <SectionDivider fromColor="#151A24" toColor="#0B0E14" variant="curve" flip />
         <Portfolio />
-        <SectionDivider fromColor="#0B0E14" toColor="#151A24" variant="angle" />
         <Services />
-        <SectionDivider fromColor="#151A24" toColor="#0B0E14" variant="wave" flip />
         <Numbers />
-        <SectionDivider fromColor="#0B0E14" toColor="#151A24" variant="curve" />
         <Process />
-        <SectionDivider fromColor="#151A24" toColor="#0B0E14" variant="wave" />
         <Certifications />
-        <SectionDivider fromColor="#0B0E14" toColor="#151A24" variant="angle" flip />
         <HobbiesLanguages />
-        <SectionDivider fromColor="#151A24" toColor="#0B0E14" variant="wave" />
         <Testimonials />
-        <SectionDivider fromColor="#0B0E14" toColor="#151A24" variant="curve" />
         <Contact />
       </main>
       <Footer />

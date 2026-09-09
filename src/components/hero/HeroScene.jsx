@@ -62,7 +62,7 @@ function OrgEdge({ start, end }) {
 
   return (
     <line geometry={lineGeometry}>
-      <lineBasicMaterial color="#262C3A" opacity={0.7} transparent linewidth={1} />
+      <lineBasicMaterial color="#2563EB" opacity={0.22} transparent linewidth={1} />
     </line>
   );
 }
@@ -91,7 +91,7 @@ function BackgroundParticles() {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[particles, 3]} />
       </bufferGeometry>
-      <pointsMaterial size={0.025} color="#262C3A" sizeAttenuation transparent opacity={0.8} />
+      <pointsMaterial size={0.03} color="#94A3B8" sizeAttenuation transparent opacity={0.5} />
     </points>
   );
 }
@@ -116,7 +116,7 @@ function Scene({ mouseX, mouseY }) {
     groupRef.current.rotation.y += (baseRotY + mouseInfluenceY - groupRef.current.rotation.y) * 0.02;
   });
 
-  const nodeColors = ['#6B9BFF', '#E5C158', '#6B9BFF', '#A8AFC0', '#A8AFC0', '#6B9BFF'];
+  const nodeColors = ['#2563EB', '#D97706', '#2563EB', '#7C3AED', '#059669', '#2563EB'];
   const nodeSizes = [0.16, 0.13, 0.13, 0.10, 0.10, 0.12];
 
   return (
@@ -131,7 +131,7 @@ function Scene({ mouseX, mouseY }) {
           position={pos}
           size={nodeSizes[i]}
           color={nodeColors[i]}
-          emissiveIntensity={i === 0 ? 0.6 : 0.35}
+          emissiveIntensity={i === 0 ? 0.5 : 0.25}
         />
       ))}
     </group>
@@ -141,9 +141,9 @@ function Scene({ mouseX, mouseY }) {
 function HeroSceneInner({ mouseX = 0, mouseY = 0 }) {
   return (
     <>
-      <ambientLight intensity={0.3} />
-      <pointLight position={[3, 3, 3]} intensity={1.2} color="#6B9BFF" />
-      <pointLight position={[-3, -1, 2]} intensity={0.6} color="#E5C158" />
+      <ambientLight intensity={0.8} />
+      <pointLight position={[3, 3, 3]} intensity={2.0} color="#2563EB" />
+      <pointLight position={[-3, -1, 2]} intensity={1.5} color="#D97706" />
       <Scene mouseX={mouseX} mouseY={mouseY} />
     </>
   );

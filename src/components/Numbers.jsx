@@ -12,7 +12,7 @@ const STATS_DATA = [
 
 export default function Numbers() {
   return (
-    <section className="py-20 max-w-6xl mx-auto px-4 sm:px-6 border-t border-[#1F2430]/40">
+    <section className="py-20 max-w-6xl mx-auto px-4 sm:px-6 border-t border-slate-200/60">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -21,13 +21,13 @@ export default function Numbers() {
         className="space-y-8"
       >
         <div className="text-center max-w-xl mx-auto space-y-2">
-          <p className="font-mono text-xs font-semibold tracking-wider text-accent uppercase">
+          <p className="font-mono text-xs font-semibold tracking-wider text-blue-600 uppercase">
             // By The Numbers
           </p>
-          <h2 className="text-2xl sm:text-3xl font-sora font-bold tracking-tight text-[#E8EAED]">
+          <h2 className="text-2xl sm:text-3xl font-sora font-bold tracking-tight text-slate-900">
             Logros & Métricas Cuantitativas
           </h2>
-          <p className="text-xs sm:text-sm text-[#8B92A5]">
+          <p className="text-xs sm:text-sm text-slate-600">
             Resultados académicos y de liderazgo alcanzados durante mi trayectoria formativa.
           </p>
         </div>

@@ -40,7 +40,7 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-base/90 backdrop-blur-md border-b border-border-dark/60 py-3 shadow-xl shadow-black/40'
+          ? 'bg-[#F7F5F0]/90 backdrop-blur-md border-b border-slate-200/80 py-3 shadow-sm shadow-slate-900/5'
           : 'bg-transparent py-5 border-b border-transparent'
       }`}
     >
@@ -48,14 +48,14 @@ export default function Navbar() {
         {/* Logo */}
         <a
           href="#home"
-          className="flex items-center gap-2.5 text-text-main hover:text-white transition-colors group"
+          className="flex items-center gap-2.5 text-slate-900 hover:text-blue-600 transition-colors group"
         >
-          <div className="w-8 h-8 rounded-lg bg-surface border border-border-dark flex items-center justify-center font-sora font-bold text-xs text-accent group-hover:border-accent/50 group-hover:shadow-accent transition-all duration-200">
+          <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center font-sora font-bold text-xs text-blue-600 shadow-sm group-hover:border-blue-400 group-hover:shadow transition-all duration-200">
             IP
           </div>
           <div className="hidden sm:block">
-            <div className="font-sora font-semibold text-sm text-text-main leading-tight">Isaac Pastén</div>
-            <div className="font-mono text-[10px] text-text-muted leading-none">Admin · IA · Dev</div>
+            <div className="font-sora font-semibold text-sm text-slate-900 leading-tight">Isaac Pastén</div>
+            <div className="font-mono text-[10px] text-slate-500 leading-none">Admin · IA · Dev</div>
           </div>
         </a>
 
@@ -68,13 +68,13 @@ export default function Navbar() {
                 key={item.id}
                 href={item.href}
                 className={`relative px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                  isActive ? 'text-text-main' : 'text-text-muted hover:text-text-main'
+                  isActive ? 'text-slate-900 font-semibold' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 {isActive && (
                   <motion.span
                     layoutId="nav-indicator"
-                    className="absolute inset-0 rounded-lg bg-surface border border-border-dark"
+                    className="absolute inset-0 rounded-lg bg-white border border-slate-200 shadow-sm"
                     transition={{ type: 'spring', bounce: 0.25, duration: 0.4 }}
                   />
                 )}
@@ -89,7 +89,7 @@ export default function Navbar() {
           {/* Certificaciones pill */}
           <a
             href="#certifications"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-semibold hover:bg-gold/20 hover:border-gold/50 transition-all duration-200"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold hover:bg-amber-100 transition-all duration-200 shadow-sm"
           >
             8 Certs
           </a>
@@ -97,23 +97,23 @@ export default function Navbar() {
           {/* CV link */}
           <a
             href="/cv"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-surface border border-border-dark text-text-muted hover:text-text-main hover:border-accent/40 text-xs font-semibold transition-all duration-200"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white/80 border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-blue-300 text-xs font-semibold shadow-sm transition-all duration-200"
           >
-            <FileText size={12} />
+            <FileText size={12} className="text-blue-600" />
             CV
           </a>
 
           {/* Finance Nexus link */}
           <a
             href="/finance-nexus"
-            className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-accent/10 border border-accent/30 text-accent text-xs font-semibold hover:bg-accent/20 hover:border-accent/50 transition-all duration-200"
+            className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold hover:bg-blue-100 hover:border-blue-300 transition-all duration-200 shadow-sm"
           >
             Finance Nexus
           </a>
 
           {/* Mobile menu toggle */}
           <button
-            className="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg bg-surface border border-border-dark text-text-muted hover:text-text-main transition-colors"
+            className="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900 shadow-sm transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={mobileMenuOpen}
@@ -131,7 +131,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
-            className="lg:hidden overflow-hidden bg-base/95 backdrop-blur-md border-t border-border-dark"
+            className="lg:hidden overflow-hidden bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg"
           >
             <nav className="max-w-6xl mx-auto px-4 py-4 space-y-1" aria-label="Menú móvil">
               {NAV_ITEMS.map((item) => (
@@ -139,36 +139,27 @@ export default function Navbar() {
                   key={item.id}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`block px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     activeSection === item.id
-                      ? 'bg-surface text-text-main border border-border-dark'
-                      : 'text-text-muted hover:text-text-main'
+                      ? 'bg-blue-50 text-blue-700 font-semibold'
+                      : 'text-slate-700 hover:bg-slate-50'
                   }`}
                 >
                   {item.label}
                 </a>
               ))}
-              <div className="pt-2 border-t border-border-dark flex flex-col gap-2">
-                <a
-                  href="#certifications"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gold/10 border border-gold/30 text-gold text-sm font-semibold"
-                >
-                  8 Certificaciones INACAP
-                </a>
+              <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
                 <a
                   href="/cv"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface border border-border-dark text-text-main text-sm font-semibold"
+                  className="flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold"
                 >
-                  <FileText size={14} />
-                  Ver CV Interactivo
+                  <FileText size={13} className="text-blue-600" /> Ver Currículum Completo
                 </a>
                 <a
                   href="/finance-nexus"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-accent/10 border border-accent/30 text-accent text-sm font-semibold"
+                  className="flex items-center justify-center gap-2 py-2 rounded-lg bg-blue-600 text-white text-xs font-semibold shadow-sm"
                 >
-                  Finance Nexus
-                  <ExternalLink size={12} />
+                  Explorar Finance Nexus
                 </a>
               </div>
             </nav>
