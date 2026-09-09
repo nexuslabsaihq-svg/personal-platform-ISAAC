@@ -89,7 +89,7 @@ function BackgroundParticles() {
   return (
     <points ref={ref}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" array={particles} count={particles.length / 3} itemSize={3} />
+        <bufferAttribute attach="attributes-position" args={[particles, 3]} />
       </bufferGeometry>
       <pointsMaterial size={0.025} color="#262C3A" sizeAttenuation transparent opacity={0.8} />
     </points>
