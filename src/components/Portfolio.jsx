@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { FolderGit2, Award, Cpu, ExternalLink, Github, Calendar, CheckCircle2, Star, Sparkles, ArrowRight } from 'lucide-react';
+import { FolderGit2, Award, Cpu, ExternalLink, Github, CheckCircle2, Star, Sparkles, ArrowRight } from 'lucide-react';
 import RevealOnScroll from './ui/RevealOnScroll';
 import { usePointerDevice } from '../hooks/usePointerDevice';
 import { useReducedMotion } from '../hooks/useReducedMotion';
@@ -74,7 +74,7 @@ const TECH_STACK = {
   ],
 };
 
-// 3D Tilt Card
+// 3D Tilt Card mejorado
 function TiltCard({ children, className = '' }) {
   const isFine = usePointerDevice();
   const reducedMotion = useReducedMotion();
@@ -107,36 +107,257 @@ function TiltCard({ children, className = '' }) {
   );
 }
 
-export default function Portfolio() {
-  const [activeTab, setActiveTab] = useState('projects');
+// Project card component
+function ProjectCard({ project, index, total }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   return (
-    <section id="portfolio" className="py-24 max-w-6xl mx-auto px-4 sm:px-6 border-t border-border-dark/40">
-      <div className="space-y-10">
+    <RevealOnScroll key={project.title} delay={index * 0.1}>
+      <TiltCard className="h-full">
+        <motion.div
+          ref={ref}
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5, delay: index * 0.08 }}
+          className="group relative h-full flex flex-col p-6 rounded-2xl bg-surface/80 border border-border-dark hover:border-accent/40 transition-all duration-300 hover:shadow-card backdrop-blur-sm overflow-hidden"
+          whileHover={{ y: -4 }}
+        >
+          {/* Glow effect on hover */}
+          <motion.div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
+            style={{
+              background: `radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), ${project.accentColor}08, transparent 60%)`,
+            }}
+          />
+
+          {/* Badge */}
+          <div className="flex items-center justify-between mb-4 relative z-10">
+            <motion.span
+              className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold border ${project.badgeColor}`}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ delay: index * 0.08 + 0.2 }}
+            >
+              {project.badge}
+            </motion.span>
+            {project.featured && (
+              <motion.div
+                animate={{ rotate: [0, 12, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Star size={14} className="text-gold fill-gold" />
+              </motion.div>
+            )}
+          </div>
+
+          {/* Title */}
+          <h3 className="font-sora font-bold text-lg text-text-main mb-2 group-hover:text-white transition-colors relative z-10">
+            {project.title}
+          </h3>
+
+          {/* Description */}
+          <p className="text-sm text-text-muted leading-relaxed flex-1 mb-4 relative z-10">
+            {project.description}
+          </p>
+
+          {/* Tags — reveal on hover */}
+          <motion.div className="flex flex-wrap gap-1.5 mb-4 relative z-10">
+            {project.tags.map((tag) => (
+              <motion.span
+                key={tag}
+                className="px-2.5 py-1 rounded-md bg-base border border-border-dark text-[11px] font-mono text-text-muted group-hover:border-accent/40 transition-all duration-200"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ delay: index * 0.08 + 0.3 }}
+              >
+                {tag}
+              </motion.span>
+            ))}
+          </motion.div>
+
+          {/* Links — appear on hover */}
+          <motion.div
+            className="flex items-center gap-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 relative z-10"
+            initial={{ opacity: 0, y: 8 }}
+          >
+            {project.deepLink && (
+              <motion.a
+                href={project.deepLink}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent hover:text-white transition-colors group/link"
+                whileHover={{ x: 4 }}
+              >
+                Ver en detalle{' '}
+                <ArrowRight size={12} className="group-hover/link:translate-x-1 transition-transform" />
+              </motion.a>
+            )}
+            {project.link && project.link !== '#' && (
+              <motion.a
+                href={project.link}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-muted hover:text-text-main transition-colors group/link"
+                whileHover={{ x: 2 }}
+              >
+                <ExternalLink size={12} className="group-hover/link:rotate-12 transition-transform" />
+                Visitar
+              </motion.a>
+            )}
+          </motion.div>
+        </motion.div>
+      </TiltCard>
+    </RevealOnScroll>
+  );
+}
+
+// Certificate item component
+function CertificateItem({ cert, index }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+
+  return (
+    <RevealOnScroll key={cert.title} delay={index * 0.07}>
+      <motion.div
+        ref={ref}
+        initial={{ opacity: 0, x: -12 }}
+        animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -12 }}
+        transition={{ duration: 0.4, delay: index * 0.07 }}
+        className="flex items-start gap-4 p-4 rounded-xl bg-surface/80 border border-border-dark hover:border-gold/30 transition-all duration-200 group backdrop-blur-sm"
+        whileHover={{ scale: 1.02, y: -2 }}
+      >
+        <motion.div
+          className="w-9 h-9 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center text-gold shrink-0 group-hover:bg-gold/20 transition-colors"
+          whileHover={{ scale: 1.12, rotate: 8 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+        >
+          <CheckCircle2 size={16} />
+        </motion.div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold text-text-main leading-tight group-hover:text-white transition-colors">
+            {cert.title}
+          </p>
+          <div className="flex items-center gap-2 mt-1.5">
+            <span className="text-[11px] font-mono text-text-muted">{cert.issuer}</span>
+            <span className="w-1 h-1 rounded-full bg-border-dark" />
+            <span className="text-[11px] font-mono text-gold">{cert.year}</span>
+          </div>
+        </div>
+      </motion.div>
+    </RevealOnScroll>
+  );
+}
+
+// Tech stack category component
+function TechCategory({ category, items, index }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+
+  return (
+    <RevealOnScroll key={category} delay={index * 0.1}>
+      <motion.div
+        ref={ref}
+        initial={{ opacity: 0, y: 16 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+        transition={{ duration: 0.4, delay: index * 0.1 }}
+        className="p-5 rounded-2xl bg-surface/80 border border-border-dark backdrop-blur-sm space-y-4 hover:border-accent/30 transition-all duration-200"
+        whileHover={{ y: -4 }}
+      >
+        <h3 className="text-sm font-sora font-semibold text-text-main flex items-center gap-2">
+          <motion.div
+            whileHover={{ rotate: 12, scale: 1.2 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+          >
+            <Sparkles size={14} className="text-accent" />
+          </motion.div>
+          {category}
+        </h3>
+        <div className="space-y-3">
+          {items.map((item, idx) => (
+            <motion.div
+              key={item.name}
+              className="flex items-center justify-between py-2 border-b border-border-dark/50 last:border-0 group"
+              initial={{ opacity: 0, x: -8 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -8 }}
+              transition={{ delay: index * 0.1 + idx * 0.05 }}
+              whileHover={{ x: 4 }}
+            >
+              <span className="text-sm text-text-muted group-hover:text-text-main transition-colors">
+                {item.name}
+              </span>
+              <motion.span
+                className="text-[11px] font-mono px-2.5 py-1 rounded-md bg-base border border-border-dark text-text-muted"
+                whileHover={{ scale: 1.05, backgroundColor: 'rgba(107, 155, 255, 0.1)' }}
+              >
+                {item.level}
+              </motion.span>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </RevealOnScroll>
+  );
+}
+
+export default function Portfolio() {
+  const [activeTab, setActiveTab] = useState('projects');
+  const reducedMotion = useReducedMotion();
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+
+  return (
+    <section
+      id="portfolio"
+      ref={sectionRef}
+      className="py-24 max-w-6xl mx-auto px-4 sm:px-6 border-t border-border-dark/40 relative overflow-hidden"
+    >
+      {/* Fondo decorativo */}
+      {!reducedMotion && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none -z-10"
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <motion.div
+            className="absolute top-1/3 right-1/4 w-96 h-96 rounded-full bg-accent/5 blur-3xl"
+            animate={!reducedMotion ? { scale: [1, 1.15, 1] } : {}}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </motion.div>
+      )}
+
+      <div className="space-y-10 relative z-10">
         {/* Header */}
         <RevealOnScroll>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-2">
+            <motion.div className="space-y-3">
               <p className="font-mono text-xs font-semibold tracking-wider text-accent uppercase">
                 // 03. Selected Work
               </p>
               <h2 className="text-3xl sm:text-4xl font-sora font-bold tracking-tight text-text-main">
                 Portafolio & Evidencias
               </h2>
-            </div>
+            </motion.div>
 
             {/* Tab Switcher */}
-            <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-surface border border-border-dark w-full sm:w-fit">
+            <motion.div
+              className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-surface border border-border-dark w-full sm:w-fit backdrop-blur-sm"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+            >
               {TABS.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
                 return (
-                  <button
+                  <motion.button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`relative flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors duration-200 flex-1 sm:flex-initial justify-center ${
                       isActive ? 'text-text-main' : 'text-text-muted hover:text-text-main'
                     }`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     {isActive && (
                       <motion.span
@@ -147,10 +368,10 @@ export default function Portfolio() {
                     )}
                     <Icon size={14} className="relative z-10" />
                     <span className="relative z-10 hidden sm:inline">{tab.label}</span>
-                  </button>
+                  </motion.button>
                 );
               })}
-            </div>
+            </motion.div>
           </div>
         </RevealOnScroll>
 
@@ -165,74 +386,9 @@ export default function Portfolio() {
           >
             {/* PROJECTS */}
             {activeTab === 'projects' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {PROJECTS.map((project, i) => (
-                  <RevealOnScroll key={project.title} delay={i * 0.1}>
-                    <TiltCard className="h-full">
-                      <div className="group relative h-full flex flex-col p-5 rounded-2xl bg-surface border border-border-dark hover:border-accent/40 transition-all duration-300 hover:shadow-card-hover overflow-hidden">
-                        {/* Glow effect on hover */}
-                        <div
-                          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
-                          style={{ background: `radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), ${project.accentColor}08, transparent 60%)` }}
-                        />
-
-                        {/* Badge */}
-                        <div className="flex items-center justify-between mb-4">
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold border ${project.badgeColor}`}>
-                            {project.badge}
-                          </span>
-                          {project.featured && (
-                            <Star size={14} className="text-gold fill-gold" />
-                          )}
-                        </div>
-
-                        {/* Title */}
-                        <h3 className="font-sora font-bold text-lg text-text-main mb-2 group-hover:text-white transition-colors">
-                          {project.title}
-                        </h3>
-
-                        {/* Description */}
-                        <p className="text-sm text-text-muted leading-relaxed flex-1 mb-4">
-                          {project.description}
-                        </p>
-
-                        {/* Tags — reveal on hover */}
-                        <div className="flex flex-wrap gap-1.5 mb-4">
-                          {project.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="px-2 py-0.5 rounded-md bg-base border border-border-dark text-[11px] font-mono text-text-muted"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-
-                        {/* Links — appear on hover */}
-                        <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                          {project.deepLink && (
-                            <a
-                              href={project.deepLink}
-                              className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent hover:text-white transition-colors"
-                            >
-                              Ver en detalle <ArrowRight size={12} />
-                            </a>
-                          )}
-                          {project.link && project.link !== '#' && (
-                            <a
-                              href={project.link}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-muted hover:text-text-main transition-colors"
-                            >
-                              <ExternalLink size={12} />
-                              Visitar
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                    </TiltCard>
-                  </RevealOnScroll>
+                  <ProjectCard key={project.title} project={project} index={i} total={PROJECTS.length} />
                 ))}
               </div>
             )}
@@ -241,37 +397,29 @@ export default function Portfolio() {
             {activeTab === 'certificates' && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {CERTIFICATES.map((cert, i) => (
-                  <RevealOnScroll key={cert.title} delay={i * 0.07}>
-                    <div className="flex items-start gap-4 p-4 rounded-xl bg-surface border border-border-dark hover:border-gold/30 transition-all duration-200 group">
-                      <div className="w-9 h-9 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center text-gold shrink-0 group-hover:bg-gold/20 transition-colors">
-                        <CheckCircle2 size={16} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-text-main leading-tight group-hover:text-white transition-colors">
-                          {cert.title}
-                        </p>
-                        <div className="flex items-center gap-2 mt-1.5">
-                          <span className="text-[11px] font-mono text-text-muted">{cert.issuer}</span>
-                          <span className="w-1 h-1 rounded-full bg-border-dark" />
-                          <span className="text-[11px] font-mono text-gold">{cert.year}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </RevealOnScroll>
+                  <CertificateItem key={cert.title} cert={cert} index={i} />
                 ))}
 
                 <RevealOnScroll delay={0.6} className="sm:col-span-2">
-                  <div className="mt-2 p-4 rounded-xl bg-gold/5 border border-gold/20 flex items-center justify-between">
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.5, delay: 0.6 }}
+                    className="mt-2 p-4 rounded-xl bg-gold/5 border border-gold/20 flex items-center justify-between hover:bg-gold/10 transition-all duration-200"
+                  >
                     <span className="text-sm text-text-muted">
                       Ver todos los certificados con fechas y números de registro
                     </span>
-                    <a
+                    <motion.a
                       href="#certifications"
-                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-gold hover:text-white transition-colors"
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-gold hover:text-white transition-colors group"
+                      whileHover={{ x: 4 }}
                     >
-                      Ver certificaciones <ArrowRight size={14} />
-                    </a>
-                  </div>
+                      Ver certificaciones{' '}
+                      <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </motion.a>
+                  </motion.div>
                 </RevealOnScroll>
               </div>
             )}
@@ -280,24 +428,7 @@ export default function Portfolio() {
             {activeTab === 'tech-stack' && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {Object.entries(TECH_STACK).map(([category, items], ci) => (
-                  <RevealOnScroll key={category} delay={ci * 0.1}>
-                    <div className="p-5 rounded-2xl bg-surface border border-border-dark space-y-4">
-                      <h3 className="text-sm font-sora font-semibold text-text-main flex items-center gap-2">
-                        <Sparkles size={14} className="text-accent" />
-                        {category}
-                      </h3>
-                      <div className="space-y-2">
-                        {items.map((item) => (
-                          <div key={item.name} className="flex items-center justify-between py-1.5 border-b border-border-dark/50 last:border-0">
-                            <span className="text-sm text-text-muted">{item.name}</span>
-                            <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-base border border-border-dark text-text-muted">
-                              {item.level}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </RevealOnScroll>
+                  <TechCategory key={category} category={category} items={items} index={ci} />
                 ))}
               </div>
             )}
