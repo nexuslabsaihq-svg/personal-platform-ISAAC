@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, lazy, Suspense } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { ArrowDown, Linkedin, Github, Mail, CheckCircle2, Terminal, Award, Users, Trophy } from 'lucide-react';
+import { motion, useMotionValue, useTransform, useInView } from 'framer-motion';
+import { ArrowDown, Linkedin, Github, Mail, Users, Award, Trophy } from 'lucide-react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { usePointerDevice } from '../hooks/usePointerDevice';
 import MagneticButton from './ui/MagneticButton';
@@ -25,7 +25,10 @@ function FloatingStat({ value, suffix = '', prefix = '', decimals = 0, label, su
 
   useEffect(() => {
     if (!inView) return;
-    if (reducedMotion) { setDisplayValue(value); return; }
+    if (reducedMotion) {
+      setDisplayValue(value);
+      return;
+    }
 
     let startTime = null;
     const duration = 1500;
@@ -48,16 +51,21 @@ function FloatingStat({ value, suffix = '', prefix = '', decimals = 0, label, su
       initial={{ opacity: 0, scale: 0.85 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, delay: 0.4 }}
-      className={`p-3 sm:p-3.5 rounded-xl bg-surface/90 border border-border-dark backdrop-blur-md shadow-card hover:border-gold/50 hover:shadow-gold transition-all duration-300 ${className}`}
+      className={`p-3 sm:p-3.5 rounded-xl bg-surface/80 backdrop-blur-sm border border-border-dark hover:border-gold/50 hover:shadow-gold hover:bg-surface transition-all duration-300 group ${className}`}
+      whileHover={{ scale: 1.05, y: -4 }}
     >
       <div className="flex items-center gap-2.5">
         {Icon && (
-          <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center text-gold shrink-0">
+          <motion.div
+            className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center text-gold shrink-0"
+            whileHover={{ scale: 1.12, rotate: 8 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+          >
             <Icon size={16} />
-          </div>
+          </motion.div>
         )}
         <div>
-          <div className="font-sora font-bold text-base sm:text-lg text-gold leading-none">
+          <div className="font-sora font-bold text-base sm:text-lg text-gold leading-none group-hover:text-white transition-colors">
             {prefix}{formatted}{suffix}
           </div>
           <div className="text-[11px] font-medium text-text-main leading-tight mt-0.5">
@@ -85,6 +93,7 @@ export default function Hero() {
   const reducedMotion = useReducedMotion();
   const isFine = usePointerDevice();
   const containerRef = useRef(null);
+  const isInView = useInView(containerRef, { once: false, amount: 0.3 });
 
   // Parallax motion values
   const mouseX = useMotionValue(0);
@@ -92,14 +101,18 @@ export default function Hero() {
   const [sceneMouseX, setSceneMouseX] = useState(0);
   const [sceneMouseY, setSceneMouseY] = useState(0);
 
-  // Parallax transforms for different layers
-  const bgX = useTransform(mouseX, [-1, 1], ['-8px', '8px']);
-  const bgY = useTransform(mouseY, [-1, 1], ['-6px', '6px']);
-  const cardX = useTransform(mouseX, [-1, 1], ['6px', '-6px']);
-  const cardY = useTransform(mouseY, [-1, 1], ['4px', '-4px']);
+  // Parallax transforms for different layers (enhanced ranges)
+  const bgX = useTransform(mouseX, [-1, 1], ['-12px', '12px']);
+  const bgY = useTransform(mouseY, [-1, 1], ['-10px', '10px']);
+  const cardX = useTransform(mouseX, [-1, 1], ['8px', '-8px']);
+  const cardY = useTransform(mouseY, [-1, 1], ['6px', '-6px']);
+
+  // Scroll-triggered parallax
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
     if (!isFine || reducedMotion) return;
+    
     const handleMouse = (e) => {
       const x = (e.clientX / window.innerWidth) * 2 - 1;
       const y = (e.clientY / window.innerHeight) * 2 - 1;
@@ -108,9 +121,18 @@ export default function Hero() {
       setSceneMouseX(x);
       setSceneMouseY(y);
     };
+
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
     window.addEventListener('mousemove', handleMouse, { passive: true });
-    return () => window.removeEventListener('mousemove', handleMouse);
-  }, [isFine, reducedMotion]);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMouse);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isFine, reducedMotion, mouseX, mouseY]);
 
   return (
     <section
@@ -118,16 +140,44 @@ export default function Hero() {
       className="min-h-screen pt-28 pb-16 flex flex-col justify-center max-w-6xl mx-auto px-4 sm:px-6 relative overflow-hidden"
       ref={containerRef}
     >
-      {/* Parallax background layer — subtle geometric accent */}
+      {/* Parallax background layers — multiple depth levels */}
       {!reducedMotion && (
-        <motion.div
-          className="absolute inset-0 pointer-events-none"
-          style={{ x: bgX, y: bgY }}
-          aria-hidden="true"
-        >
-          <div className="absolute top-1/4 right-10 w-64 h-64 rounded-full bg-accent/5 blur-3xl" />
-          <div className="absolute bottom-1/4 left-10 w-48 h-48 rounded-full bg-gold/5 blur-3xl" />
-        </motion.div>
+        <>
+          {/* Layer 1 — Far back, slow movement */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              x: bgX,
+              y: bgY,
+              z: -100,
+            }}
+            aria-hidden="true"
+          >
+            <div className="absolute top-1/4 right-10 w-96 h-96 rounded-full bg-accent/3 blur-3xl" />
+          </motion.div>
+
+          {/* Layer 2 — Mid, medium movement */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              y: scrollY * 0.3,
+            }}
+            aria-hidden="true"
+          >
+            <div className="absolute bottom-1/4 left-10 w-72 h-72 rounded-full bg-gold/3 blur-3xl" />
+          </motion.div>
+
+          {/* Layer 3 — Front, fast movement */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              y: scrollY * 0.5,
+            }}
+            aria-hidden="true"
+          >
+            <div className="absolute top-1/3 right-1/3 w-64 h-64 rounded-full bg-violet-custom/3 blur-2xl" />
+          </motion.div>
+        </>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
@@ -135,10 +185,14 @@ export default function Hero() {
         <div className="lg:col-span-7 space-y-6">
           {/* Badge */}
           <RevealOnScroll delay={0.1} blur={false}>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface border border-border-dark text-xs font-mono text-text-muted">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            <motion.div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface/80 backdrop-blur-sm border border-border-dark text-xs font-mono text-text-muted hover:border-accent/40 transition-all duration-200">
+              <motion.span
+                className="w-2 h-2 rounded-full bg-emerald-400"
+                animate={!reducedMotion ? { scale: [1, 1.2, 1] } : {}}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
               Estudiante de Administración de Empresas — INACAP
-            </div>
+            </motion.div>
           </RevealOnScroll>
 
           {/* Título */}
@@ -153,9 +207,9 @@ export default function Hero() {
               <span className="relative inline-block">
                 funcionan.
                 <motion.span
-                  className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-accent to-accent/0 rounded-full"
+                  className="absolute bottom-0 left-0 h-[3px] bg-gradient-to-r from-accent via-accent to-accent/0 rounded-full"
                   initial={{ width: 0 }}
-                  animate={{ width: reducedMotion ? '100%' : '100%' }}
+                  animate={isInView ? { width: '100%' } : { width: 0 }}
                   transition={{ delay: 0.8, duration: 0.8, ease: 'easeOut' }}
                 />
               </span>
@@ -164,81 +218,89 @@ export default function Hero() {
 
           {/* Bio */}
           <RevealOnScroll delay={0.3}>
-            <p className="text-text-muted text-base sm:text-lg leading-relaxed max-w-xl">
+            <motion.p className="text-text-muted text-base sm:text-lg leading-relaxed max-w-xl">
               En etapa final de Ingeniería en Administración de Empresas en INACAP.
               Lideré equipos de <strong className="text-text-main">7+ personas</strong>,
               desarrollé soluciones con <strong className="text-text-main">IA aplicada</strong> y
               construí herramientas que simplifican la gestión operativa real.
-            </p>
+            </motion.p>
           </RevealOnScroll>
 
           {/* CTAs */}
           <RevealOnScroll delay={0.4}>
             <div className="flex flex-wrap gap-3">
               <MagneticButton>
-                <a
+                <motion.a
                   href="#portfolio"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-white font-semibold text-sm transition-all duration-200 shadow-accent hover:shadow-accent-lg"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-white font-semibold text-sm transition-all duration-200 shadow-accent"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   Ver Portfolio
-                  <ArrowDown size={14} className="rotate-[-90deg]" />
-                </a>
+                  <motion.div animate={{ y: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                    <ArrowDown size={14} className="rotate-[-90deg]" />
+                  </motion.div>
+                </motion.a>
               </MagneticButton>
               <MagneticButton>
-                <a
+                <motion.a
                   href="#contact"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface border border-border-dark hover:border-accent/50 text-text-main font-semibold text-sm transition-all duration-200"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface border border-border-dark hover:border-accent/50 text-text-main font-semibold text-sm transition-all"
+                  whileHover={{ y: -2, borderColor: 'rgba(107, 155, 255, 0.5)' }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   Contactarme
-                </a>
+                </motion.a>
               </MagneticButton>
               <MagneticButton>
-                <a
+                <motion.a
                   href="/cv"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-transparent border border-border-dark hover:border-gold/50 text-text-muted hover:text-gold font-semibold text-sm transition-all duration-200"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-transparent border border-border-dark hover:border-gold/50 text-text-muted hover:text-gold font-semibold text-sm transition-all"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   Ver CV
-                </a>
+                </motion.a>
               </MagneticButton>
             </div>
           </RevealOnScroll>
 
           {/* Social links */}
           <RevealOnScroll delay={0.5}>
-            <div className="flex items-center gap-4">
-              <a
-                href="https://www.linkedin.com/in/isaacpasten"
-                target="_blank" rel="noreferrer"
-                className="text-text-muted hover:text-accent transition-colors"
-                aria-label="LinkedIn de Isaac Pastén"
-              >
-                <Linkedin size={18} />
-              </a>
-              <a
-                href="https://github.com/nexuslabsaihq-svg"
-                target="_blank" rel="noreferrer"
-                className="text-text-muted hover:text-accent transition-colors"
-                aria-label="GitHub de Isaac Pastén"
-              >
-                <Github size={18} />
-              </a>
-              <a
-                href="mailto:isaacpasten.dev@gmail.com"
-                className="text-text-muted hover:text-accent transition-colors"
-                aria-label="Email de Isaac Pastén"
-              >
-                <Mail size={18} />
-              </a>
+            <motion.div className="flex items-center gap-4">
+              {[
+                { href: 'https://www.linkedin.com/in/isaacpasten', icon: Linkedin, label: 'LinkedIn' },
+                { href: 'https://github.com/nexuslabsaihq-svg', icon: Github, label: 'GitHub' },
+                { href: 'mailto:isaacpasten.dev@gmail.com', icon: Mail, label: 'Email' },
+              ].map(({ href, icon: Icon, label }) => (
+                <motion.a
+                  key={label}
+                  href={href}
+                  target={href.startsWith('mailto') ? undefined : '_blank'}
+                  rel={href.startsWith('mailto') ? undefined : 'noreferrer'}
+                  className="text-text-muted hover:text-accent transition-colors"
+                  whileHover={{ scale: 1.2, rotate: 12 }}
+                  whileTap={{ scale: 0.9 }}
+                  aria-label={`${label} de Isaac Pastén`}
+                >
+                  <Icon size={18} />
+                </motion.a>
+              ))}
               <span className="h-px flex-1 max-w-16 bg-border-dark" />
               <span className="text-xs font-mono text-text-muted">Macul, Santiago</span>
-            </div>
+            </motion.div>
           </RevealOnScroll>
 
           {/* Terminal snippet */}
           <RevealOnScroll delay={0.6}>
-            <div className="rounded-xl bg-surface border border-border-dark p-4 max-w-sm">
+            <motion.div
+              className="rounded-xl bg-surface/80 backdrop-blur-sm border border-border-dark p-4 max-w-sm hover:border-accent/40 transition-all duration-300"
+              whileHover={{ y: -4, borderColor: 'rgba(107, 155, 255, 0.4)' }}
+            >
               <div className="flex items-center gap-1.5 mb-3">
-                <Terminal size={12} className="text-text-muted" />
+                <svg className="w-3 h-3 text-text-muted" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M9 6.75L15 12l-6 5.25v-10.5z" />
+                </svg>
                 <span className="text-xs font-mono text-text-muted">stack.sh</span>
                 <div className="ml-auto flex gap-1">
                   {['bg-red-500/60', 'bg-yellow-500/60', 'bg-emerald-500/60'].map((c, i) => (
@@ -259,7 +321,7 @@ export default function Hero() {
                   </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </RevealOnScroll>
         </div>
 
@@ -268,7 +330,11 @@ export default function Hero() {
           {/* 3D Scene — fondo decorativo, detrás de la foto */}
           <motion.div
             className="absolute inset-0 w-full h-full pointer-events-none"
-            style={{ x: bgX, y: bgY }}
+            style={{
+              x: cardX,
+              y: cardY,
+              scale: !reducedMotion ? 1 + scrollY * 0.0001 : 1,
+            }}
             aria-hidden="true"
           >
             <div className="w-full h-full opacity-60">
@@ -284,8 +350,13 @@ export default function Hero() {
             className="relative z-10"
           >
             {/* Aura luminosa */}
-            <div className="absolute inset-0 rounded-2xl bg-accent/20 blur-2xl scale-110" aria-hidden="true" />
-            
+            <motion.div
+              className="absolute inset-0 rounded-2xl bg-accent/20 blur-2xl scale-110"
+              animate={!reducedMotion ? { scale: [1.1, 1.15, 1.1] } : {}}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              aria-hidden="true"
+            />
+
             {/* Marco de la foto */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -293,6 +364,7 @@ export default function Hero() {
               transition={{ duration: 0.7, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
               className="relative rounded-2xl overflow-hidden border-2 border-accent/40 shadow-accent-lg"
               style={{ width: 260, height: 320 }}
+              whileHover={!reducedMotion ? { scale: 1.02 } : {}}
             >
               <img
                 src="/images/profile.jpg"
@@ -352,7 +424,12 @@ export default function Hero() {
         animate={reducedMotion ? {} : { y: [0, 8, 0] }}
         transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
       >
-        <ArrowDown size={18} className="text-text-muted" />
+        <motion.div
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <ArrowDown size={18} className="text-text-muted" />
+        </motion.div>
       </motion.div>
     </section>
   );
