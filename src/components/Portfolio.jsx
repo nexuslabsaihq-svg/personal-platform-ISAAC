@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FolderGit2, Award, Cpu, ExternalLink, Github, Calendar, CheckCircle2, Star, Sparkles } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { FolderGit2, Award, Cpu, ExternalLink, Github, Calendar, CheckCircle2, Star, Sparkles, ArrowRight } from 'lucide-react';
+import RevealOnScroll from './ui/RevealOnScroll';
+import { usePointerDevice } from '../hooks/usePointerDevice';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 const TABS = [
   { id: 'projects', label: 'Projects', icon: FolderGit2 },
@@ -16,25 +19,29 @@ const PROJECTS = [
     description: 'Fundador y desarrollador de ERP financiero para PYMEs chilenas. Plataforma integral de control de liquidez, facturación y métricas de rentabilidad operativa.',
     tags: ['React', 'Firebase', 'Gemini API'],
     link: 'https://finance-nexus.vercel.app',
+    deepLink: '/finance-nexus',
     featured: true,
+    accentColor: '#6B9BFF',
   },
   {
     title: 'Ecosistema NOSTRADAMUZ',
     badge: 'IA Aplicada',
-    badgeColor: 'bg-purple-500/15 text-purple-400 border-purple-500/40',
+    badgeColor: 'bg-purple-brand/15 text-purple-brand border-purple-brand/40',
     description: 'Sistema propio de orquestación de agentes de IA con 8+ skills especializadas para automatización de flujos y análisis de contexto empresarial avanzado.',
     tags: ['Claude', 'Gemini', 'Prompt Engineering'],
     link: 'https://github.com/nexuslabsaihq-svg/personal-platform-ISAAC',
     featured: true,
+    accentColor: '#9B7FFF',
   },
   {
     title: 'Análisis UX — WOM Chile',
     badge: 'Académico',
-    badgeColor: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/40',
+    badgeColor: 'bg-emerald-brand/15 text-emerald-brand border-emerald-brand/40',
     description: 'Informe de evaluación sumativa y tangibilización de servicios enfocado en satisfacción, retención de clientes y experiencia de usuario en telecomunicaciones.',
     tags: ['INACAP', 'Experiencia del Usuario'],
     link: '#',
     featured: false,
+    accentColor: '#4ADE80',
   },
 ];
 
@@ -49,267 +56,252 @@ const CERTIFICATES = [
   { title: 'Fundamentos de Finanzas Corporativas', issuer: 'INACAP', year: '2023' },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
+const TECH_STACK = {
+  'Gestión & Negocios': [
+    { name: 'Excel / Google Sheets', level: 'Intermedio' },
+    { name: 'Power BI', level: 'Básico' },
+    { name: 'HCMFRONT ERP', level: 'Avanzado' },
+    { name: 'BPMN 2.0', level: 'Intermedio' },
+    { name: 'Gestión de Proyectos Scrum', level: 'Intermedio' },
+  ],
+  'Herramientas Digitales & IA': [
+    { name: 'React / Vite', level: 'Intermedio' },
+    { name: 'Firebase', level: 'Básico-Intermedio' },
+    { name: 'Gemini API', level: 'Intermedio' },
+    { name: 'Claude (Anthropic)', level: 'Intermedio' },
+    { name: 'Prompt Engineering', level: 'Avanzado' },
+    { name: 'Tailwind CSS', level: 'Intermedio' },
+  ],
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' },
-  },
-};
+// 3D Tilt Card
+function TiltCard({ children, className = '' }) {
+  const isFine = usePointerDevice();
+  const reducedMotion = useReducedMotion();
+  const ref = useRef(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    if (!isFine || reducedMotion || !ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = ((e.clientY - rect.top) / rect.height - 0.5) * -8;
+    const y = ((e.clientX - rect.left) / rect.width - 0.5) * 8;
+    setTilt({ x, y });
+  };
+
+  const handleMouseLeave = () => setTilt({ x: 0, y: 0 });
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      animate={{ rotateX: tilt.x, rotateY: tilt.y }}
+      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+      style={{ transformStyle: 'preserve-3d', perspective: 800 }}
+      className={className}
+      data-cursor="project"
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 export default function Portfolio() {
   const [activeTab, setActiveTab] = useState('projects');
 
   return (
-    <section id="portfolio" className="py-24 max-w-6xl mx-auto px-4 sm:px-6 border-t border-[#1F2430]/40">
+    <section id="portfolio" className="py-24 max-w-6xl mx-auto px-4 sm:px-6 border-t border-border-dark/40">
       <div className="space-y-10">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-2">
-            <p className="font-mono text-xs font-semibold tracking-wider text-accent uppercase">
-              // 03. Selected Work
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-sora font-bold tracking-tight text-[#E8EAED]">
-              Portafolio & Evidencias
-            </h2>
-          </div>
+        <RevealOnScroll>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="space-y-2">
+              <p className="font-mono text-xs font-semibold tracking-wider text-accent uppercase">
+                // 03. Selected Work
+              </p>
+              <h2 className="text-3xl sm:text-4xl font-sora font-bold tracking-tight text-text-main">
+                Portafolio & Evidencias
+              </h2>
+            </div>
 
-          {/* Tab Switcher */}
-          <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#131722] border border-[#1F2430] w-full sm:w-fit">
-            {TABS.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`relative flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-mono transition-colors z-10 ${
-                    isActive ? 'text-accent font-semibold' : 'text-[#8B92A5] hover:text-[#E8EAED]'
-                  }`}
-                >
-                  {isActive && (
-                    <motion.div
-                      layoutId="activePortfolioTab"
-                      className="absolute inset-0 rounded-xl bg-[#0B0E14] border border-accent/40 shadow-[0_0_15px_rgba(91,141,239,0.15)] -z-10"
-                      transition={{ type: 'spring', stiffness: 400, damping: 32 }}
-                    />
-                  )}
-                  <Icon size={16} />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
+            {/* Tab Switcher */}
+            <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-surface border border-border-dark w-full sm:w-fit">
+              {TABS.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`relative flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors duration-200 flex-1 sm:flex-initial justify-center ${
+                      isActive ? 'text-text-main' : 'text-text-muted hover:text-text-main'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="portfolio-tab"
+                        className="absolute inset-0 rounded-xl bg-base border border-border-dark shadow-sm"
+                        transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
+                      />
+                    )}
+                    <Icon size={14} className="relative z-10" />
+                    <span className="relative z-10 hidden sm:inline">{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </RevealOnScroll>
 
         {/* Tab Content */}
         <AnimatePresence mode="wait">
-          {/* PROJECTS TAB */}
-          {activeTab === 'projects' && (
-            <motion.div
-              key="projects"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.35, ease: 'easeInOut' }}
-            >
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                className="grid grid-cols-1 md:grid-cols-3 gap-6"
-              >
-                {PROJECTS.map((project, idx) => (
-                  <motion.div
-                    key={idx}
-                    variants={cardVariants}
-                    whileHover={{
-                      y: -4,
-                      boxShadow: '0 12px 30px -10px rgba(91, 141, 239, 0.2)',
-                    }}
-                    transition={{ duration: 0.2 }}
-                    className="p-6 rounded-2xl bg-[#131722] border border-[#1F2430] hover:border-accent/60 transition-colors flex flex-col justify-between space-y-5 group relative overflow-hidden"
-                  >
-                    {/* Background subtle gradient */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full blur-2xl pointer-events-none group-hover:bg-accent/10 transition-colors" />
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+          >
+            {/* PROJECTS */}
+            {activeTab === 'projects' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {PROJECTS.map((project, i) => (
+                  <RevealOnScroll key={project.title} delay={i * 0.1}>
+                    <TiltCard className="h-full">
+                      <div className="group relative h-full flex flex-col p-5 rounded-2xl bg-surface border border-border-dark hover:border-accent/40 transition-all duration-300 hover:shadow-card-hover overflow-hidden">
+                        {/* Glow effect on hover */}
+                        <div
+                          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
+                          style={{ background: `radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), ${project.accentColor}08, transparent 60%)` }}
+                        />
 
-                    <div className="space-y-4">
-                      {/* Top Bar: Badge */}
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs text-[#8B92A5]">
-                          0{idx + 1}
-                        </span>
-                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-mono border ${project.badgeColor}`}>
-                          {project.badge}
-                        </span>
-                      </div>
-
-                      <h3 className="text-lg font-sora font-semibold text-[#E8EAED] group-hover:text-white transition-colors">
-                        {project.title}
-                      </h3>
-
-                      <p className="text-xs text-[#8B92A5] leading-relaxed">
-                        {project.description}
-                      </p>
-                    </div>
-
-                    <div className="space-y-4 pt-2 border-t border-[#1F2430]/60">
-                      {/* Tags */}
-                      <div className="flex flex-wrap gap-1.5">
-                        {project.tags.map((tag, tIdx) => (
-                          <span
-                            key={tIdx}
-                            className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#0B0E14] text-[#8B92A5] border border-[#1F2430]"
-                          >
-                            {tag}
+                        {/* Badge */}
+                        <div className="flex items-center justify-between mb-4">
+                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold border ${project.badgeColor}`}>
+                            {project.badge}
                           </span>
+                          {project.featured && (
+                            <Star size={14} className="text-gold fill-gold" />
+                          )}
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="font-sora font-bold text-lg text-text-main mb-2 group-hover:text-white transition-colors">
+                          {project.title}
+                        </h3>
+
+                        {/* Description */}
+                        <p className="text-sm text-text-muted leading-relaxed flex-1 mb-4">
+                          {project.description}
+                        </p>
+
+                        {/* Tags — reveal on hover */}
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {project.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-2 py-0.5 rounded-md bg-base border border-border-dark text-[11px] font-mono text-text-muted"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Links — appear on hover */}
+                        <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                          {project.deepLink && (
+                            <a
+                              href={project.deepLink}
+                              className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent hover:text-white transition-colors"
+                            >
+                              Ver en detalle <ArrowRight size={12} />
+                            </a>
+                          )}
+                          {project.link && project.link !== '#' && (
+                            <a
+                              href={project.link}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-muted hover:text-text-main transition-colors"
+                            >
+                              <ExternalLink size={12} />
+                              Visitar
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </TiltCard>
+                  </RevealOnScroll>
+                ))}
+              </div>
+            )}
+
+            {/* CERTIFICATES */}
+            {activeTab === 'certificates' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {CERTIFICATES.map((cert, i) => (
+                  <RevealOnScroll key={cert.title} delay={i * 0.07}>
+                    <div className="flex items-start gap-4 p-4 rounded-xl bg-surface border border-border-dark hover:border-gold/30 transition-all duration-200 group">
+                      <div className="w-9 h-9 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center text-gold shrink-0 group-hover:bg-gold/20 transition-colors">
+                        <CheckCircle2 size={16} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-text-main leading-tight group-hover:text-white transition-colors">
+                          {cert.title}
+                        </p>
+                        <div className="flex items-center gap-2 mt-1.5">
+                          <span className="text-[11px] font-mono text-text-muted">{cert.issuer}</span>
+                          <span className="w-1 h-1 rounded-full bg-border-dark" />
+                          <span className="text-[11px] font-mono text-gold">{cert.year}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </RevealOnScroll>
+                ))}
+
+                <RevealOnScroll delay={0.6} className="sm:col-span-2">
+                  <div className="mt-2 p-4 rounded-xl bg-gold/5 border border-gold/20 flex items-center justify-between">
+                    <span className="text-sm text-text-muted">
+                      Ver todos los certificados con fechas y números de registro
+                    </span>
+                    <a
+                      href="#certifications"
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-gold hover:text-white transition-colors"
+                    >
+                      Ver certificaciones <ArrowRight size={14} />
+                    </a>
+                  </div>
+                </RevealOnScroll>
+              </div>
+            )}
+
+            {/* TECH STACK */}
+            {activeTab === 'tech-stack' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {Object.entries(TECH_STACK).map(([category, items], ci) => (
+                  <RevealOnScroll key={category} delay={ci * 0.1}>
+                    <div className="p-5 rounded-2xl bg-surface border border-border-dark space-y-4">
+                      <h3 className="text-sm font-sora font-semibold text-text-main flex items-center gap-2">
+                        <Sparkles size={14} className="text-accent" />
+                        {category}
+                      </h3>
+                      <div className="space-y-2">
+                        {items.map((item) => (
+                          <div key={item.name} className="flex items-center justify-between py-1.5 border-b border-border-dark/50 last:border-0">
+                            <span className="text-sm text-text-muted">{item.name}</span>
+                            <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-base border border-border-dark text-text-muted">
+                              {item.level}
+                            </span>
+                          </div>
                         ))}
                       </div>
-
-                      {/* Action Link */}
-                      {project.link !== '#' ? (
-                        <a
-                          href={project.link.startsWith('http') ? project.link : `https://${project.link}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-accent hover:text-accent-hover transition-colors"
-                        >
-                          <span>Visitar proyecto</span>
-                          <ExternalLink size={13} />
-                        </a>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 text-xs font-mono text-[#8B92A5]">
-                          Documento académico
-                        </span>
-                      )}
                     </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
-          )}
-
-          {/* CERTIFICATES TAB */}
-          {activeTab === 'certificates' && (
-            <motion.div
-              key="certificates"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.35, ease: 'easeInOut' }}
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {CERTIFICATES.map((cert, idx) => (
-                  <motion.div
-                    key={idx}
-                    variants={cardVariants}
-                    whileHover={{
-                      y: -4,
-                      boxShadow: '0 10px 25px -10px rgba(212, 175, 55, 0.2)',
-                    }}
-                    transition={{ duration: 0.2 }}
-                    className="p-5 rounded-2xl bg-[#131722] border border-[#1F2430] hover:border-gold/40 transition-colors flex flex-col justify-between space-y-4"
-                  >
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="w-8 h-8 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">
-                          <Award size={16} />
-                        </div>
-                        <span className="text-[10px] font-mono text-gold px-2 py-0.5 rounded-full bg-gold/10 border border-gold/30 flex items-center gap-1">
-                          <CheckCircle2 size={10} />
-                          INACAP
-                        </span>
-                      </div>
-                      <h4 className="font-sora text-xs font-semibold text-[#E8EAED] leading-snug">
-                        {cert.title}
-                      </h4>
-                    </div>
-                    <div className="pt-2 border-t border-[#1F2430]/60 flex items-center justify-between font-mono text-[10px] text-[#8B92A5]">
-                      <span>{cert.issuer}</span>
-                      <span>{cert.year}</span>
-                    </div>
-                  </motion.div>
+                  </RevealOnScroll>
                 ))}
               </div>
-            </motion.div>
-          )}
-
-          {/* TECH STACK TAB */}
-          {activeTab === 'tech-stack' && (
-            <motion.div
-              key="tech-stack"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.35, ease: 'easeInOut' }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            >
-              <div className="p-6 rounded-2xl bg-[#131722] border border-[#1F2430] space-y-4">
-                <h3 className="text-base font-sora font-semibold text-[#E8EAED] flex items-center gap-2">
-                  <Cpu size={18} className="text-accent" />
-                  <span>Gestión, Negocios & Personas</span>
-                </h3>
-                <p className="text-xs text-[#8B92A5]">
-                  Herramientas y competencias clave en administración, control y recursos humanos:
-                </p>
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {[
-                    'Excel Intermedio (Reportes & Control)',
-                    'Power BI (Dashboards & Modelado)',
-                    'HCMFRONT (Gestión de Personas)',
-                    'Control Presupuestario',
-                    'Modelamiento BPMN 2.0',
-                    'Liderazgo de Equipos (7+ personas)',
-                    'Resolución de Incidencias Operativas',
-                  ].map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-3 py-1.5 rounded-lg bg-[#0B0E14] border border-[#1F2430] text-xs font-mono text-[#E8EAED]"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="p-6 rounded-2xl bg-[#131722] border border-[#1F2430] space-y-4">
-                <h3 className="text-base font-sora font-semibold text-[#E8EAED] flex items-center gap-2">
-                  <Sparkles size={18} className="text-purple-400" />
-                  <span>Tecnología, Desarrollo & IA Aplicada</span>
-                </h3>
-                <p className="text-xs text-[#8B92A5]">
-                  Capacidades digitales avanzadas para optimizar y crear soluciones modernas:
-                </p>
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {[
-                    'IA Aplicada (Claude & Gemini API)',
-                    'Prompt Engineering Avanzado',
-                    'React & Tailwind CSS',
-                    'Firebase & Bases de Datos',
-                    'Vite & Tooling Web',
-                    'Git / GitHub Version Control',
-                  ].map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1.5 rounded-lg bg-[#0B0E14] border border-[#1F2430] text-xs font-mono text-[#E8EAED]"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          )}
+            )}
+          </motion.div>
         </AnimatePresence>
       </div>
     </section>
