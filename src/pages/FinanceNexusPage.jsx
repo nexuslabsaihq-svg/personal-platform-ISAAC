@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { ArrowLeft, ExternalLink, Github, CheckCircle2, Cpu, Database, Zap, Users, BarChart3, Bot } from 'lucide-react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
-import RevealOnScroll from './ui/RevealOnScroll';
+import RevealOnScroll from '../components/ui/RevealOnScroll';
 
 // ─── Finance 3D Scene ─────────────────────────────────────────────────────────
 // Cubos apilados tipo balance sheet + flujo de datos entre capas — evoca ERP/finanzas
