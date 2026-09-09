@@ -201,3 +201,174 @@ Se configuraron variables personalizadas en `tailwind.config.js` y `src/index.cs
 ---
 
 *Documento generado y archivado el 8 de septiembre de 2026 para resguardo del proyecto personal-platform-ISAAC.*
+
+
+---
+
+## Sesión: 9 de Septiembre de 2026 — v2.0 Rediseño Integral
+
+**Agente IA:** Antigravity (Google Deepmind) — Modelo Claude Sonnet 4.6 Thinking  
+**Método de commit:** GitHub REST API (PAT Fine-grained token, scope Contents R/W)  
+**Total de archivos modificados/creados:** 20  
+**Total de commits:** 12 (por archivo, fases 0 a 7)
+
+---
+
+### Fase 0 — Corrección Crítica de Contraste y Paleta (WCAG AA)
+
+Paleta actualizada en `tailwind.config.js`:
+
+| Token | Antes | Después | Ratio vs #0B0E14 |
+|-------|-------|---------|------------------|
+| surface | #131722 | #151A24 | — |
+| border-dark | #1F2430 | #262C3A | — |
+| text-main | #E8EAED | #F5F6F8 | ~14:1 ✅ |
+| text-muted | #8B92A5 | #A8AFC0 | ~5.5:1 ✅ |
+| accent | #5B8DEF | #6B9BFF | ~4.9:1 ✅ |
+| gold | #D4AF37 | #E5C158 | — |
+
+Agrega: keyframes (float, drawIn, countUp), boxShadow accent/gold, fontFamily Sora/Inter/JetBrains Mono.
+
+---
+
+### Fase 1 — Sistema de Animación Completo
+
+**Nuevos hooks:**
+- `src/hooks/useReducedMotion.js` — lee `prefers-reduced-motion`, desactiva animaciones decorativas
+- `src/hooks/useMousePosition.js` — posición del cursor normalizada [-1,1]
+- `src/hooks/usePointerDevice.js` — detecta `pointer: fine` vs táctil
+
+**Nuevos componentes UI:**
+- `src/components/ui/CustomCursor.jsx` — cursor dual-ring con RAF smooth lag, adapta color por contexto (proyecto=gold, link=blue). Desactivado en táctil.
+- `src/components/ui/MagneticButton.jsx` — atracción spring ≤8px hacia cursor. Desactivado en táctil.
+- `src/components/ui/RevealOnScroll.jsx` — opacity+y+blur reveal con IntersectionObserver, once:true
+- `src/components/ui/SectionDivider.jsx` — SVG wave/angle/curve que conecta visualmente secciones adyacentes
+
+**Nuevo componente 3D:**
+- `src/components/hero/HeroScene.jsx` — React Three Fiber (R3F). 6 nodos octaédricos conectados tipo organigrama (evoca administración/datos). Flotación con sin(time), rotación ±6° reactiva al cursor en desktop. Canvas 400×400px, lazy-loaded con Suspense. `powerPreference: 'low-power'`. Desactivado en reduced-motion.
+
+**Componentes existentes actualizados:**
+- `Hero.jsx`: 3D HeroScene como decoración detrás de la foto (foto sigue siendo elemento principal). Parallax 3 capas con `useMotionValue`. Botones Ver Portfolio / Contactarme / Ver CV wrapped en `MagneticButton`. Reveal animations en todos los bloques. Paleta migrada a tokens.
+- `Navbar.jsx`: Agrega ítems Servicios, CV, Finance Nexus. Pill de "8 Certs" en gold. Indicador deslizante `layoutId` preservado. Paleta migrada a tokens.
+- `About.jsx`: Skill bars con `motion.div` que se dibujan al entrar viewport (IntersectionObserver once:true). Reveal animations. Bio expandida. Paleta migrada.
+- `Portfolio.jsx`: 3D tilt cards (rotateX/Y ±8° según posición mouse, spring). Hover avanzado: tags y links aparecen con opacity+translate al hover. Reveal staggered. Paleta migrada.
+
+---
+
+### Fase 2 — Sección de Certificaciones
+
+**Nuevo archivo:** `src/components/Certifications.jsx`
+
+- 8 certificados INACAP con datos reales y completos (título, descripción de contenidos, institución con link a inacap.cl, N° de registro, fecha)
+- Números de certificado reales: N° 11462629, 11462618, 11461648, 11462626, 11462623, 11462632, 11462608; Asistente en Remuneraciones: "N° no disponible"
+- Timeline vertical por año (2023, 2024, 2025) sticky en desktop, pills horizontales en móvil
+- Filtro con AnimatePresence, contador por año
+
+---
+
+### Fase 3 — CV Interactivo (React Router)
+
+**Nuevo archivo:** `src/pages/CVPage.jsx`
+
+- Ruta: `/cv` (React Router DOM v6)
+- Secciones: Resumen, Experiencia (timeline animado), Educación (timeline), Habilidades (barras animadas), Certificaciones (grid), Idiomas (cards con banderas)
+- Diseño distinto al sitio principal: fondo #0B0E14 limpio, tipografía document-style, sin efectos decorativos
+- Sin datos sensibles: sin teléfono, email, RUT ni dirección exacta — solo "Macul, Santiago" y disponibilidad
+- Acordeón animado con AnimatePresence (height 0→auto)
+
+---
+
+### Fase 4 — Página Finance Nexus
+
+**Nuevo archivo:** `src/pages/FinanceNexusPage.jsx`
+
+- Ruta: `/finance-nexus`
+- Escena R3F dedicada: 4 capas horizontales (cubos tipo balance sheet) que flotan y rotan lentamente — evoca ERP/finanzas. DataFlow connectors pulsantes entre capas.
+- Rol de Isaac: Fundador & Desarrollador Líder (explicitado)
+- Sección dedicada "IA Aplicada — No un buzzword": Prompt Engineering, Gemini API Integration, Automatización de Flujos
+- Stack: React+Vite, Firebase, Gemini API, Tailwind CSS
+- Botón "Visitar proyecto" → https://finance-nexus.vercel.app (link real)
+- Sin métricas de negocio inventadas
+
+---
+
+### Fase 5 — Hobbies e Idiomas
+
+**Nuevo archivo:** `src/components/HobbiesLanguages.jsx`
+
+- Idiomas con banderas: 🇬🇧 Inglés Intermedio (B1, barra 55%), 🇫🇷 Francés Básico (A2, barra 25%), 🇮🇹 Italiano "[Nivel a confirmar por Isaac]" (sin barra)
+- 4 placeholders de hobbies editables con comentario `// TODO: Reemplazar con hobby real de Isaac`
+- Nota al pie: "Contenido de hobbies pendiente de confirmación por Isaac"
+
+---
+
+### Fase 6 — Servicios Freelance
+
+**Nuevo archivo:** `src/components/Services.jsx`
+
+- 3 cards: "Asesoría Administrativa para PYMEs", "Organización de Procesos y Control de Caja", "Automatización con IA para Tareas Administrativas"
+- Cada card con descripción, tags técnicos y botón → #contact
+- Sin precios ni casos de éxito inventados
+- Tono profesional de venta de servicios
+
+---
+
+### Fase 7 — Integración Final
+
+**App.jsx actualizado:**
+- React Router DOM v6 con rutas `/`, `/cv`, `/finance-nexus`
+- `CustomCursor` integrado en layout principal
+- `SectionDivider` entre cada sección (wave/angle/curve alternados)
+- Orden de secciones: Hero → About → Portfolio → Services → Numbers → Process → Certifications → HobbiesLanguages → Testimonials → Contact
+
+**package.json actualizado (v0.2.0):**
+- `react-router-dom: ^6.27.0`
+- `@react-three/fiber: ^8.17.10`
+- `@react-three/drei: ^9.115.0`
+- `three: ^0.169.0`
+
+---
+
+### Estado Final del Árbol de Commits (Rama: main)
+
+```
+ec43f09 feat(fase0): correccion de paleta y contraste WCAG AA
+6ac0f47 feat(fase1): hook useReducedMotion para prefers-reduced-motion
+3063c1a feat(fase1): hook useMousePosition para tracking del cursor
+fe594c6 feat(fase1): hook usePointerDevice para detectar pointer fine vs touch
+be92006 feat(fase1): CustomCursor con anillo y punto, RAF smooth lag
+f41ebb4 feat(fase1): MagneticButton con atraccion suave al cursor
+03c4610 feat(fase1): RevealOnScroll con opacity+y+blur al entrar viewport
+9bcdc5c feat(fase1): SectionDivider SVG wave para continuidad visual entre secciones
+e924448 feat(fase1): HeroScene R3F - nodos organigrama flotantes reactivos al cursor
+3e8a82f feat(fase1): Navbar actualizado - nuevos items CV/Finance/Servicios/Certs
+0c024f4 feat(fase1): Hero con 3D HeroScene, parallax 3 capas, botones magneticos
+4dc5401 feat(fase0+1): About con skill bars animadas, reveal, paleta WCAG AA
+9ab924a feat(fase1): Portfolio con 3D tilt cards, reveal, hover avanzado
+f9cd013 feat(fase2): seccion Certificaciones con 8 certs INACAP, timeline por año
+2aba4d0 feat(fase5): seccion Hobbies e Idiomas - banderas, niveles verificados
+0e48af3 feat(fase6): seccion Servicios freelance - 3 cards con link a contacto
+6584af0 feat(fase3): pagina CV interactivo con acordeon, timeline animado, skill bars
+1eb56de feat(fase4): pagina Finance Nexus con 3D R3F ERP scene, IA aplicada destacada
+16e1c0a feat(fase3+6): App.jsx React Router v6, CustomCursor, SectionDividers
+7bee25b chore(deps): react-router-dom, three, @react-three/fiber, @react-three/drei
+```
+
+---
+
+### Pendiente de parte de Isaac
+
+1. **Hobbies reales**: Reemplazar los 4 placeholders en `src/components/HobbiesLanguages.jsx` (buscar `TODO: Reemplazar`)
+2. **Nivel de italiano**: Confirmar nivel real en `LANGUAGES` array del mismo archivo
+3. **`npm install`**: Ejecutar en el repo local para instalar las nuevas dependencias (react-router-dom, three, @react-three/fiber, @react-three/drei). Vercel lo hace automáticamente en el deploy.
+4. **Build de producción local**: Si se requiere verificar sin Vercel, ejecutar `npm run build` una vez instaladas las deps.
+
+---
+
+### Notas Técnicas de Rendimiento
+
+- El canvas 3D del Hero usa `powerPreference: 'low-power'` y `dpr: [1, 1.5]` para evitar sobrecarga en dispositivos móviles
+- Todas las animaciones decorativas se desactivan con `prefers-reduced-motion: reduce`
+- El cursor personalizado y los botones magnéticos se desactivan automáticamente en dispositivos táctiles (`pointer: coarse`)
+- Los componentes de página (CVPage, FinanceNexusPage) son lazy-loaded con React.lazy + Suspense — no bloquean la carga inicial
+- React Three Fiber carga solo cuando el Hero entra en viewport (Suspense fallback visible)
