@@ -66,7 +66,7 @@ const HOBBIES = [
 const LEVEL_COLORS = {
   accent: { bar: 'bg-accent', badge: 'bg-accent/10 text-accent border-accent/30' },
   gold: { bar: 'bg-gold', badge: 'bg-gold/10 text-gold border-gold/30' },
-  purple: { bar: 'bg-purple-brand', badge: 'bg-purple-brand/10 text-purple-brand border-purple-brand/30' },
+  purple: { bar: 'bg-violet-custom', badge: 'bg-violet-custom/10 text-violet-custom border-violet-custom/30' },
 };
 
 export default function HobbiesLanguages() {
