@@ -22,3 +22,18 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Seguridad — variables de entorno
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+
+# Archivos de configuración sensibles
+*.pem
+*.key
+*.cert
+firebase-adminsdk*.json
+service-account*.json
