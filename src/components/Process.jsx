@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, useSpring } from 'framer-motion';
 import { Search, CalendarDays, Play, ShieldAlert, CheckCircle, CheckCheck } from 'lucide-react';
 import RevealOnScroll from './ui/RevealOnScroll';
 import { usePointerDevice } from '../hooks/usePointerDevice';
@@ -126,7 +126,8 @@ function TimelineConnector({ index, total, color, reducedMotion }) {
 function ProcessCard({ step, title, desc, icon: Icon, color, bgGradient, index, total, reducedMotion, isFine }) {
   const cardRef = useRef(null);
   const isInView = useInView(cardRef, { once: true, amount: 0.3 });
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const tiltX = useSpring(0, { stiffness: 300, damping: 25 });
+  const tiltY = useSpring(0, { stiffness: 300, damping: 25 });
   const colorClass = COLOR_MAP[color];
 
   const handleMouseMove = (e) => {
@@ -134,10 +135,14 @@ function ProcessCard({ step, title, desc, icon: Icon, color, bgGradient, index, 
     const rect = cardRef.current.getBoundingClientRect();
     const x = ((e.clientY - rect.top) / rect.height - 0.5) * -6;
     const y = ((e.clientX - rect.left) / rect.width - 0.5) * 6;
-    setTilt({ x, y });
+    tiltX.set(x);
+    tiltY.set(y);
   };
 
-  const handleMouseLeave = () => setTilt({ x: 0, y: 0 });
+  const handleMouseLeave = () => {
+    tiltX.set(0);
+    tiltY.set(0);
+  };
 
   return (
     <div className="relative h-full">
@@ -149,9 +154,12 @@ function ProcessCard({ step, title, desc, icon: Icon, color, bgGradient, index, 
         ref={cardRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        animate={!reducedMotion ? { rotateX: tilt.x, rotateY: tilt.y } : {}}
-        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-        style={{ transformStyle: 'preserve-3d', perspective: 800 }}
+        style={{
+          transformStyle: 'preserve-3d',
+          perspective: 800,
+          rotateX: reducedMotion ? 0 : tiltX,
+          rotateY: reducedMotion ? 0 : tiltY,
+        }}
         initial={{ opacity: 0, y: 24 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
         transition={{

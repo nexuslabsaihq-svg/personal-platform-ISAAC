@@ -31,6 +31,12 @@ dist-ssr
 .env.production
 .env.test
 
+# Vercel local project metadata
+.vercel
+
+# Private Finance Nexus source documents belong in an access-controlled store.
+docs/finance-nexus/private/
+
 # Archivos de configuración sensibles
 *.pem
 *.key

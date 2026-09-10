@@ -166,7 +166,7 @@ export default function About() {
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
                 Lideré equipos de <strong className="text-text-main">7+ personas</strong> en
-                contextos académicos reales, obtuve una nota de egreso de{' '}
+                operaciones de retail gastronómico de alto flujo, obtuve una nota de egreso de{' '}
                 <strong className="text-text-main">5.9</strong> y actualmente desarrollo{' '}
                 <strong className="text-text-main">Finance Nexus</strong>, un ERP financiero
                 para PYMEs chilenas con integración de IA (Gemini API).

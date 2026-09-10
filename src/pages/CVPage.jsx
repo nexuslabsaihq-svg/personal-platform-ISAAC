@@ -11,35 +11,47 @@ const CV_META = {
   location: 'Macul, Santiago, Chile',
   availability: 'Abierto a trabajar',
   github: 'https://github.com/nexuslabsaihq-svg',
-  linkedin: 'https://www.linkedin.com/in/isaacpasten',
+  linkedin: 'https://www.linkedin.com/in/isaac-patricio-diaz-14041b3b3',
 };
 
-const RESUMEN = `Estudiante en etapa final de Ingeniería en Administración de Empresas en INACAP (nota de egreso 5.9, Ranking N°2 de cohorte). Con experiencia en liderazgo de equipos de 7+ personas, gestión operativa, control de procesos y desarrollo de soluciones con Inteligencia Artificial aplicada. Fundador y desarrollador líder de Finance Nexus, ERP financiero para PYMEs chilenas.`;
+const RESUMEN = `Estudiante de último año de Ingeniería en Administración de Empresas en INACAP y Técnico de Nivel Superior en Administración de Empresas titulado. Cuento con experiencia en liderazgo de equipos de 7 o más personas, cierres de caja, inventario y cumplimiento de procedimientos en retail gastronómico de alto flujo. Complemento esa experiencia con 8 certificaciones INACAP y proyectos propios de automatización administrativa y financiera con IA aplicada.`;
 
 const EXPERIENCIA = [
   {
-    role: 'Fundador & Desarrollador Líder',
+    role: 'Bartender — Operación Integral de Barra',
+    company: 'Delicias · Mallplaza Egaña',
+    period: 'Jun. 2023 — Dic. 2023',
+    type: 'Experiencia laboral',
+    description: 'Operé integralmente la barra en un entorno de alto flujo, incluyendo cócteles, cafés y postres; también gestioné caja, cierres y la apertura y cierre del local mediante checklist operativo.',
+    highlights: [
+      'Gestión de caja y cierres frecuentes con trazabilidad de medios de pago',
+      'Apertura y cierre de local con control de orden e insumos',
+      'Venta sugerida bajo presión de alto flujo de clientes',
+    ],
+  },
+  {
+    role: 'Operario / Subgerente de Turno',
+    company: 'Dunkin · Mallplaza Calama',
+    period: 'Ene. 2022 — May. 2023',
+    type: 'Experiencia laboral',
+    description: 'Coordiné operaciones diarias de sala y barra, con responsabilidad sobre equipos, cierres de caja, inventario y cumplimiento de procedimientos operacionales.',
+    highlights: [
+      'Coordinación de equipos de 7 o más colaboradores',
+      'Cierres de caja, cuadraturas y control de efectivo y pagos electrónicos',
+      'Uso operativo de HCMFRONT para turnos y gestión de personal',
+    ],
+  },
+  {
+    role: 'Fundador & Desarrollador',
     company: 'Finance Nexus',
     companyUrl: 'https://finance-nexus.vercel.app',
     period: '2025 — Presente',
     type: 'Proyecto propio',
-    description: 'Diseñé y desarrollé desde cero un ERP financiero orientado a PYMEs chilenas. Stack: React, Firebase, Gemini API. Integración de IA para automatización de reportes, análisis de liquidez y generación de documentos.',
+    description: 'Desarrollo independiente de un ERP financiero orientado a PYMEs chilenas, enfocado en control de liquidez, facturación y métricas operativas.',
     highlights: [
-      'Arquitectura full stack con React + Firebase Firestore',
-      'Integración de Gemini API para IA aplicada a finanzas',
-      'UX/UI diseñada mobile-first con Tailwind CSS',
-    ],
-  },
-  {
-    role: 'Líder de Equipo — Proyecto Académico',
-    company: 'INACAP',
-    period: '2023 — 2024',
-    type: 'Académico',
-    description: 'Lideré equipos de 7+ personas en proyectos de simulación empresarial. Coordiné planificación, ejecución y presentación de propuestas administrativas y de mejora de procesos.',
-    highlights: [
-      'Gestión de equipo de 7+ personas',
-      'Metodología Scrum aplicada a proyectos académicos',
-      'Presentaciones ejecutivas ante panel evaluador',
+      'Stack práctico: React, Firebase y Gemini API',
+      'Automatización de reportes, análisis de liquidez y generación de documentos',
+      'Diseño mobile-first con Tailwind CSS',
     ],
   },
 ];
@@ -47,17 +59,24 @@ const EXPERIENCIA = [
 const EDUCACION = [
   {
     degree: 'Ingeniería en Administración de Empresas',
-    institution: 'INACAP — Instituto Nacional de Capacitación',
-    period: '2022 — 2026 (en curso, etapa final)',
-    nota: '5.9 — Ranking N°2',
-    highlights: ['Especialización en gestión operativa y control financiero', '8 certificaciones técnicas', 'Proyecto de título: Finance Nexus ERP'],
+    institution: 'INACAP — Instituto Profesional, Sede Ñuñoa',
+    period: '2023 — 2026 (en curso, último año)',
+    nota: 'En curso',
+    highlights: ['Formación en gestión operativa y control financiero', 'Jornada vespertina'],
+  },
+  {
+    degree: 'Técnico de Nivel Superior en Administración de Empresas',
+    institution: 'INACAP — Centro de Formación Técnica',
+    period: 'Titulado · Certificado de egreso: Ene. 2025',
+    nota: '5.9 / 7.0 — Ranking N°2 de 3',
+    highlights: ['8 certificaciones técnicas INACAP', 'Software ERP: formación académica, nota 6.4'],
   },
 ];
 
 const SKILLS_CV = [
   { name: 'Excel / Google Sheets', level: 65, category: 'Herramientas' },
   { name: 'Power BI', level: 40, category: 'Herramientas' },
-  { name: 'HCMFRONT ERP', level: 70, category: 'Herramientas' },
+  { name: 'HCMFRONT', level: 70, category: 'Herramientas' },
   { name: 'Gestión de Equipos', level: 80, category: 'Blandas' },
   { name: 'Atención al Cliente', level: 90, category: 'Blandas' },
   { name: 'IA Aplicada (Gemini / Claude)', level: 75, category: 'Tecnología' },
@@ -67,13 +86,13 @@ const SKILLS_CV = [
 ];
 
 const CERTS_CV = [
-  { title: 'Gestión Estratégica & Business Intelligence', year: '2025–2026', number: '11462629' },
-  { title: 'Analista de Gestión Administrativo', year: '2024', number: '11462618' },
-  { title: 'Asistente Administrativo', year: '2024', number: '11461648' },
-  { title: 'Asistente Tributario', year: '2024', number: '11462626' },
-  { title: 'Asistente en Marketing', year: '2024', number: '11462623' },
-  { title: 'Compras Públicas', year: '2024', number: '11462632' },
-  { title: 'Administración de la Emergencia', year: '2024', number: '11462608' },
+  { title: 'Business Analytics', year: 'Nov. 2024', number: '11462629' },
+  { title: 'Analista de Gestión Administrativo', year: 'Nov. 2024', number: '11462618' },
+  { title: 'Asistente Administrativo', year: 'Nov. 2024', number: '11461648' },
+  { title: 'Asistente Tributario', year: 'Nov. 2024', number: '11462626' },
+  { title: 'Asistente en Marketing', year: 'Nov. 2024', number: '11462623' },
+  { title: 'Compras Públicas', year: 'Nov. 2024', number: '11462632' },
+  { title: 'Administración de la Emergencia', year: 'Nov. 2024', number: '11462608' },
   { title: 'Asistente en Remuneraciones', year: 'Dic. 2023', number: 'no disponible' },
 ];
 
@@ -81,7 +100,6 @@ const IDIOMAS_CV = [
   { lang: 'Español', level: 'Nativo', flag: '🇨🇱' },
   { lang: 'Inglés', level: 'Intermedio (B1)', flag: '🇬🇧' },
   { lang: 'Francés', level: 'Básico (A2)', flag: '🇫🇷' },
-  { lang: 'Italiano', level: '[Nivel a confirmar]', flag: '🇮🇹' },
 ];
 
 // ─── Componentes ─────────────────────────────────────────────────────────────

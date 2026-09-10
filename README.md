@@ -92,3 +92,7 @@ npm run build
 ## 📄 Bitácora de Desarrollo
 
 Para consultar el registro completo de la sesión de trabajo del 8 de septiembre de 2026, revisa el archivo [BITACORA-PROYECTO.md](./BITACORA-PROYECTO.md).
+
+## 🤖 Continuidad para agentes de IA
+
+Las instrucciones compartidas para GitHub Copilot, Claude y otros agentes están en [AGENTS.md](./AGENTS.md). Antes de modificar el proyecto, todo agente debe leer el [espacio de continuidad](./docs/ai/README.md), la última entrada de la [bitácora operativa](./docs/ai/WORKLOG.md) y el [protocolo de sesión](./docs/ai/SESSION-PROTOCOL.md).

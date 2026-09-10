@@ -46,14 +46,14 @@ const PROJECTS = [
 ];
 
 const CERTIFICATES = [
-  { title: 'Gestión Estratégica & Business Intelligence', issuer: 'INACAP', year: '2025 - 2026' },
-  { title: 'Metodologías Ágiles & Gestión Scrum', issuer: 'INACAP', year: '2025' },
-  { title: 'Control de Gestión & Presupuestos', issuer: 'INACAP', year: '2024' },
-  { title: 'Legislación Laboral & Administración de Personal', issuer: 'INACAP', year: '2024' },
-  { title: 'Evaluación Económica de Proyectos', issuer: 'INACAP', year: '2024' },
-  { title: 'Modelamiento de Procesos BPMN 2.0', issuer: 'INACAP', year: '2023' },
-  { title: 'Herramientas Digitales & ERP Corporativo', issuer: 'INACAP', year: '2023' },
-  { title: 'Fundamentos de Finanzas Corporativas', issuer: 'INACAP', year: '2023' },
+  { title: 'Business Analytics', issuer: 'INACAP', year: 'Nov. 2024' },
+  { title: 'Analista de Gestión Administrativo', issuer: 'INACAP', year: 'Nov. 2024' },
+  { title: 'Asistente Administrativo', issuer: 'INACAP', year: 'Nov. 2024' },
+  { title: 'Asistente Tributario', issuer: 'INACAP', year: 'Nov. 2024' },
+  { title: 'Asistente en Marketing', issuer: 'INACAP', year: 'Nov. 2024' },
+  { title: 'Compras Públicas', issuer: 'INACAP', year: 'Nov. 2024' },
+  { title: 'Administración de la Emergencia', issuer: 'INACAP', year: 'Nov. 2024' },
+  { title: 'Asistente en Remuneraciones', issuer: 'INACAP', year: 'Dic. 2023' },
 ];
 
 const TECH_STACK = {

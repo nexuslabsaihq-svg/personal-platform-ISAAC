@@ -1,6 +1,5 @@
 import React, { useRef, useMemo, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { usePointerDevice } from '../../hooks/usePointerDevice';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import * as THREE from 'three';
 
@@ -96,7 +95,7 @@ function BackgroundParticles() {
   );
 }
 
-function Scene({ mouseX, mouseY }) {
+function Scene() {
   const groupRef = useRef();
   const reducedMotion = useReducedMotion();
 
@@ -109,8 +108,8 @@ function Scene({ mouseX, mouseY }) {
     const baseRotY = reducedMotion ? 0 : t * 0.12;
 
     // Add mouse influence (max ~6 degrees = ~0.105 rad)
-    const mouseInfluenceX = mouseY * 0.08;
-    const mouseInfluenceY = mouseX * 0.08;
+    const mouseInfluenceX = reducedMotion ? 0 : state.pointer.y * 0.08;
+    const mouseInfluenceY = reducedMotion ? 0 : state.pointer.x * 0.08;
 
     groupRef.current.rotation.x += (baseRotX + mouseInfluenceX - groupRef.current.rotation.x) * 0.05;
     groupRef.current.rotation.y += (baseRotY + mouseInfluenceY - groupRef.current.rotation.y) * 0.02;
@@ -138,18 +137,18 @@ function Scene({ mouseX, mouseY }) {
   );
 }
 
-function HeroSceneInner({ mouseX = 0, mouseY = 0 }) {
+function HeroSceneInner() {
   return (
     <>
       <ambientLight intensity={0.3} />
       <pointLight position={[3, 3, 3]} intensity={1.2} color="#6B9BFF" />
       <pointLight position={[-3, -1, 2]} intensity={0.6} color="#E5C158" />
-      <Scene mouseX={mouseX} mouseY={mouseY} />
+      <Scene />
     </>
   );
 }
 
-export default function HeroScene({ mouseX = 0, mouseY = 0 }) {
+export default function HeroScene({ isActive }) {
   return (
     <div className="w-full h-full" aria-hidden="true">
       <Suspense fallback={
@@ -160,10 +159,11 @@ export default function HeroScene({ mouseX = 0, mouseY = 0 }) {
         <Canvas
           camera={{ position: [0, 0, 4.5], fov: 50 }}
           style={{ background: 'transparent' }}
-          dpr={[1, 1.5]}
+          dpr={[1, 1.25]}
+          frameloop={isActive ? 'always' : 'never'}
           gl={{ antialias: true, alpha: true, powerPreference: 'low-power' }}
         >
-          <HeroSceneInner mouseX={mouseX} mouseY={mouseY} />
+          <HeroSceneInner />
         </Canvas>
       </Suspense>
     </div>

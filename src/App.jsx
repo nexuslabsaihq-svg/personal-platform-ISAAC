@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
+import Experience from './components/Experience';
 import Portfolio from './components/Portfolio';
 import Services from './components/Services';
 import Process from './components/Process';
@@ -37,6 +38,8 @@ function MainSite() {
         <SectionDivider fromColor="#0B0E14" toColor="#151A24" variant="wave" />
         <About />
         <SectionDivider fromColor="#151A24" toColor="#0B0E14" variant="curve" flip />
+        <Experience />
+        <SectionDivider fromColor="#0B0E14" toColor="#151A24" variant="angle" />
         <Portfolio />
         <SectionDivider fromColor="#0B0E14" toColor="#151A24" variant="angle" />
         <Services />

@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { id: 'home', label: 'Home', href: '#home' },
   { id: 'about', label: 'About', href: '#about' },
   { id: 'skills', label: 'Skills', href: '#skills' },
+  { id: 'experience', label: 'Experiencia', href: '#experience' },
   { id: 'portfolio', label: 'Portfolio', href: '#portfolio' },
   { id: 'servicios', label: 'Servicios', href: '#servicios' },
   { id: 'process', label: 'Process', href: '#process' },
@@ -112,7 +113,7 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <nav
-          className="hidden lg:flex items-center gap-1 relative z-10"
+          className="hidden xl:flex items-center gap-1 relative z-10"
           aria-label="Navegación principal"
         >
           {NAV_ITEMS.map((item, idx) => {
@@ -213,7 +214,7 @@ export default function Navbar() {
 
           {/* Mobile menu toggle */}
           <motion.button
-            className="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg bg-surface border border-border-dark text-text-muted hover:text-text-main transition-colors relative z-20"
+            className="xl:hidden w-9 h-9 flex items-center justify-center rounded-lg bg-surface border border-border-dark text-text-muted hover:text-text-main transition-colors relative z-20"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={mobileMenuOpen}
@@ -241,7 +242,7 @@ export default function Navbar() {
               duration: reducedMotion ? 0 : 0.25,
               ease: 'easeInOut',
             }}
-            className="lg:hidden overflow-hidden bg-base/95 backdrop-blur-md border-t border-border-dark relative z-40"
+            className="xl:hidden overflow-hidden bg-base/95 backdrop-blur-md border-t border-border-dark relative z-40"
           >
             <nav
               className="max-w-6xl mx-auto px-4 py-4 space-y-1"

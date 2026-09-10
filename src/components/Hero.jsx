@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, lazy, Suspense } from 'react';
-import { motion, useMotionValue, useTransform, useInView } from 'framer-motion';
+import { motion, useMotionValue, useTransform, useInView, useScroll } from 'framer-motion';
 import { ArrowDown, Linkedin, Github, Mail, Users, Award, Trophy } from 'lucide-react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { usePointerDevice } from '../hooks/usePointerDevice';
@@ -98,17 +98,16 @@ export default function Hero() {
   // Parallax motion values
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const [sceneMouseX, setSceneMouseX] = useState(0);
-  const [sceneMouseY, setSceneMouseY] = useState(0);
+  const { scrollY } = useScroll();
 
   // Parallax transforms for different layers (enhanced ranges)
   const bgX = useTransform(mouseX, [-1, 1], ['-12px', '12px']);
   const bgY = useTransform(mouseY, [-1, 1], ['-10px', '10px']);
   const cardX = useTransform(mouseX, [-1, 1], ['8px', '-8px']);
   const cardY = useTransform(mouseY, [-1, 1], ['6px', '-6px']);
-
-  // Scroll-triggered parallax
-  const [scrollY, setScrollY] = useState(0);
+  const midLayerY = useTransform(scrollY, (value) => value * 0.3);
+  const frontLayerY = useTransform(scrollY, (value) => value * 0.5);
+  const sceneScale = useTransform(scrollY, (value) => 1 + value * 0.0001);
 
   useEffect(() => {
     if (!isFine || reducedMotion) return;
@@ -118,19 +117,11 @@ export default function Hero() {
       const y = (e.clientY / window.innerHeight) * 2 - 1;
       mouseX.set(x);
       mouseY.set(y);
-      setSceneMouseX(x);
-      setSceneMouseY(y);
-    };
-
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
     };
 
     window.addEventListener('mousemove', handleMouse, { passive: true });
-    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('mousemove', handleMouse);
-      window.removeEventListener('scroll', handleScroll);
     };
   }, [isFine, reducedMotion, mouseX, mouseY]);
 
@@ -160,7 +151,7 @@ export default function Hero() {
           <motion.div
             className="absolute inset-0 pointer-events-none"
             style={{
-              y: scrollY * 0.3,
+              y: midLayerY,
             }}
             aria-hidden="true"
           >
@@ -171,7 +162,7 @@ export default function Hero() {
           <motion.div
             className="absolute inset-0 pointer-events-none"
             style={{
-              y: scrollY * 0.5,
+              y: frontLayerY,
             }}
             aria-hidden="true"
           >
@@ -333,13 +324,13 @@ export default function Hero() {
             style={{
               x: cardX,
               y: cardY,
-              scale: !reducedMotion ? 1 + scrollY * 0.0001 : 1,
+              scale: !reducedMotion ? sceneScale : 1,
             }}
             aria-hidden="true"
           >
             <div className="w-full h-full opacity-60">
               <Suspense fallback={null}>
-                <HeroScene mouseX={sceneMouseX} mouseY={sceneMouseY} />
+                <HeroScene isActive={isInView} />
               </Suspense>
             </div>
           </motion.div>
@@ -385,7 +376,7 @@ export default function Hero() {
                 value={7}
                 suffix="+"
                 label="Personas lideradas"
-                sublabel="Proyecto académico real"
+                sublabel="Operación retail"
                 icon={Users}
               />
             </motion.div>
