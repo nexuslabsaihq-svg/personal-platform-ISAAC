@@ -2,16 +2,112 @@
 <html lang="es" class="dark scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- Viewport y básico -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Portafolio profesional de Isaac Patricio Pastén Díaz — Estudiante de Ingeniería en Administración de Empresas." />
-    <title>isaac.dev • Portafolio Profesional</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#0B0E14" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Isaac Patricio Pastén Díaz • Estudiante de Ingeniería en Administración de Empresas en INACAP. Especialista en gestión operativa, automatización con IA y desarrollo de soluciones administrativas inteligentes." />
+    <meta name="keywords" content="Isaac Pastén, Administración de Empresas, IA, Gestión Operativa, ERP, Finance Nexus, Desarrollador, Portfolio" />
+    <meta name="author" content="Isaac Patricio Pastén Díaz" />
+    <meta name="creator" content="Isaac Patricio Pastén Díaz" />
+    <meta name="robots" content="index, follow" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="language" content="es" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://personal-platform-isaac.vercel.app/" />
+    <meta property="og:title" content="Isaac Pastén • Portafolio Profesional — Administración & IA" />
+    <meta property="og:description" content="Estudiante de Administración de Empresas especializado en IA aplicada, gestión de equipos y automatización de procesos. Fundador de Finance Nexus." />
+    <meta property="og:image" content="https://personal-platform-isaac.vercel.app/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="isaac.dev" />
+    <meta property="og:locale" content="es_CL" />
+    
+    <!-- Twitter / X -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://personal-platform-isaac.vercel.app/" />
+    <meta property="twitter:title" content="Isaac Pastén • Portafolio Profesional" />
+    <meta property="twitter:description" content="Administración de Empresas + IA + Gestión Operativa. Construyendo soluciones inteligentes." />
+    <meta property="twitter:image" content="https://personal-platform-isaac.vercel.app/og-image.jpg" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://personal-platform-isaac.vercel.app/" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.svg" />
+    
+    <!-- Fonts con prefetch -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+    
+    <!-- DNS Prefetch para APIs externas -->
+    <link rel="dns-prefetch" href="https://api.github.com" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    
+    <!-- Preload críticos -->
+    <link rel="preload" as="font" href="/fonts/sora.woff2" type="font/woff2" crossorigin />
+    
+    <!-- Structured Data (JSON-LD) para SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Isaac Patricio Pastén Díaz",
+      "url": "https://personal-platform-isaac.vercel.app",
+      "description": "Estudiante de Ingeniería en Administración de Empresas especializado en IA y gestión operativa",
+      "sameAs": [
+        "https://github.com/nexuslabsaihq-svg",
+        "https://www.linkedin.com/in/isaacpasten",
+        "https://twitter.com/isaacpasten"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Consulta General",
+        "email": "isaacpasten.dev@gmail.com"
+      },
+      "jobTitle": "Estudiante de Administración de Empresas",
+      "worksFor": {
+        "@type": "EducationalOrganization",
+        "name": "INACAP"
+      },
+      "image": "https://personal-platform-isaac.vercel.app/og-image.jpg"
+    }
+    </script>
+    
+    <!-- Schema para Portfolio -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      "name": "Isaac Pastén Portfolio",
+      "author": {
+        "@type": "Person",
+        "name": "Isaac Patricio Pastén Díaz"
+      },
+      "datePublished": "2026-01-01",
+      "description": "Portafolio profesional con proyectos, certificaciones y skills"
+    }
+    </script>
+    
+    <!-- Title -->
+    <title>isaac.dev • Portafolio Profesional — Administración & IA</title>
   </head>
-  <body class="bg-[#0B0E14] text-[#E8EAED] antialiased selection:bg-[#5B8DEF]/30 selection:text-white font-sans">
+  <body class="bg-base text-text-main antialiased selection:bg-accent/30 selection:text-white font-sans overflow-x-hidden">
     <div id="root"></div>
+    <noscript>
+      <p style="color: #8B92A5; padding: 20px; text-align: center;">
+        Esta aplicación requiere JavaScript habilitado para funcionar correctamente.
+      </p>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
